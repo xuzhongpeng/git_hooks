@@ -1,0 +1,20 @@
+#!/bin/sh
+
+
+scriptPath="node_modules/husky/run.js"
+hookName=`basename "$0"`
+gitParams="$*"
+
+
+error() {
+  echo "\033[31m $1 \033[0m" 
+}
+warn(){
+  echo "\033[33m $1 \033[0m" 
+}
+log(){
+  echo " $1"
+}
+log $scriptPath
+log $hookName
+log $gitParams
