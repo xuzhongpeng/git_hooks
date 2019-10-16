@@ -1,5 +1,7 @@
 import 'package:git_hooks/runtime/run.dart' as m;
 import './install/CreateHooks.dart';
+import "package:yaml/yaml.dart";
+import "dart:io";
 
 main(List<String> arguments) {
   if (arguments != null && arguments.length > 0) {
@@ -11,7 +13,12 @@ main(List<String> arguments) {
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        print('v0.0.1');
+        Directory rootDir = Directory.current;
+        File f = new File(rootDir.path + "/pubspec.yaml");
+        String text = f.readAsStringSync();
+        Map yaml = loadYaml(text);
+        String version = yaml['version'];
+        print("v" + version);
       } else {
         print("'${str}' is not a git_hooks command,see follow");
         print('');

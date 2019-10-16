@@ -4,4 +4,4 @@
 
 ## 0.0.2
 
-- change some
+- fix some min-bugs and perfect readme.md

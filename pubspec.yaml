@@ -5,10 +5,11 @@ homepage: https://github.com/xuzhongpeng/git_hooks
 author: xuzhongpeng <1452754335@qq.com>
 
 environment:
-  sdk: '>=2.4.0 <3.0.0'
+  sdk: '>=2.3.0 <3.0.0'
 
 dependencies:
   path: ^1.6.4
   yaml: ^2.2.0
+
 executables:
   git_hooks:
