@@ -13,7 +13,7 @@ run(List<String> arguments) async {
       print(result.stdout);
     }
     progress.finish(showTiming: true);
-    if (result.exitCode != 0) {
+    if (result.exitCode == 1) {
       exit(1);
     }
   } catch (e) {
