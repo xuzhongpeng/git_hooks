@@ -54,7 +54,7 @@ pub global deactivate git_hooks
 
 ## create files in .git/hooks
 
-we can create git hooks with
+We can create git hooks with
 
 ```
 git_hooks create
@@ -66,7 +66,7 @@ It will create a file `git_hooks.dart` in your project root directory.
 
 ## Using
 
-we can change `git_hooks.dart`
+You can change `git_hooks.dart`
 
 ```dart
 void main(List arguments) {
@@ -97,7 +97,7 @@ git add .
 git commit -m 'some messages'
 ```
 
-if it output following.Congratulations on your successful use of it.
+If it output following.Congratulations on your successful use of it.
 
 ```
 start pre-commit hook...               /
@@ -114,4 +114,33 @@ this is commitMsg
 1.2s
 ```
 
-##
+## Define our own hook functions
+
+You can use enum `Git` to Define more hooks functions. 
+
+There is all hooks provide
+```
+enum Git {
+  applypatchMsg,
+  preApplypatch,
+  postApplypatch,
+  preCommit,
+  prepareCommitMsg,
+  commitMsg,
+  postCommit,
+  preRebase,
+  postCheckout,
+  postMerge,
+  prePush,
+  preReceive,
+  update,
+  postReceive,
+  postUpdate,
+  pushToCheckout,
+  preAutoGc,
+  postRewrite,
+  sendemailValidate
+}
+```
+
+You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks.
