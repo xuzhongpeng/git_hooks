@@ -1,6 +1,8 @@
 import 'package:git_hooks/runtime/run.dart' as m;
 import './install/CreateHooks.dart';
 import "package:yaml/yaml.dart";
+import 'package:git_hooks/utils/type.dart';
+
 import "dart:io";
 
 main(List<String> arguments) {
@@ -14,7 +16,7 @@ main(List<String> arguments) {
         help();
       } else if (str == '-v' || str == '--version') {
         Directory rootDir = Directory.current;
-        File f = new File(rootDir.path + "/pubspec.yaml");
+        File f = new File(uri(rootDir.path + "/pubspec.yaml"));
         String text = f.readAsStringSync();
         Map yaml = loadYaml(text);
         String version = yaml['version'];

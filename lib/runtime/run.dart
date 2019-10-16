@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:git_hooks/git_hooks.dart';
+import 'package:git_hooks/utils/type.dart';
 
 run(List<String> arguments) async {
   try {
@@ -8,7 +9,7 @@ run(List<String> arguments) async {
     print('');
     Directory rootDir = Directory.current;
     ProcessResult result = await Process.run(
-        'dart', [rootDir.path + "/git_hooks.dart", ...arguments.sublist(1)]);
+        'dart', [uri(rootDir.path + "/git_hooks.dart"), ...arguments.sublist(1)]);
     if (result.stdout.length != 0) {
       print(result.stdout);
     }

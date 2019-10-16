@@ -1,19 +1,22 @@
 import "dart:io";
+import "package:path/path.dart" as path;
 import "package:path/path.dart" show dirname;
 import "package:git_hooks/git_hooks.dart";
 import "package:yaml/yaml.dart";
 
 class CreateHooks {
   Directory rootDir = Directory.current;
-  String nowDir = dirname(Platform.script.path);
+  String nowDir = dirname(path.fromUri(Platform.script));
   Future<bool> copyFile() async {
+  print(nowDir);
+
     Logger logger = new Logger.standard();
     try {
-      var commonFile = new File(nowDir + '/install/common');
+      var commonFile = new File(uri(nowDir + '/install/common'));
       String commonStr = commonFile.readAsStringSync();
       commonStr = _createHeader() + commonStr;
-      Directory gitDir = Directory(rootDir.path + "/.git/");
-      String gitHookDir = rootDir.path + "/.git/hooks/";
+      Directory gitDir = Directory(uri(rootDir.path + "/.git/"));
+      String gitHookDir = uri(rootDir.path + "/.git/hooks/");
       if (!gitDir.existsSync()) {
         print(gitDir.path);
         throw new ArgumentError('.git is not exists in your project');
@@ -26,12 +29,14 @@ class CreateHooks {
           await hookFile.create();
         }
         await hookFile.writeAsString(commonStr);
+        if(!Platform.isWindows){
         await Process.run('chmod', ['777', path])
             .catchError((onError) => print(onError));
+        }
       }
-      File hookFile = new File(rootDir.path + '/git_hooks.dart');
+      File hookFile = new File(uri(rootDir.path + '/git_hooks.dart'));
       if (!hookFile.existsSync()) {
-        File example = new File(nowDir + '/install/git_hooks_example');
+        File example = new File(uri(nowDir + '/install/git_hooks_example'));
         String exampleStr = await example.readAsStringSync();
         await hookFile.createSync();
         await hookFile.writeAsStringSync(exampleStr);

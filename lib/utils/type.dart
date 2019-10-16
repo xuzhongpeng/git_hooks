@@ -1,3 +1,5 @@
+import 'package:path/path.dart' as path;
+
 enum Git {
   applypatchMsg,
   preApplypatch,
@@ -41,3 +43,6 @@ final Map<String, String> hookList = {
   'sendemailValidate': 'sendemail-validate'
 };
 typedef Future<bool> UserBackFun();
+String uri(String file){
+  return path.fromUri(path.toUri(file));
+}
