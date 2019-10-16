@@ -18,3 +18,4 @@ log(){
 log $scriptPath
 log $hookName
 log $gitParams
+exit(1)
