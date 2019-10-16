@@ -107,8 +107,7 @@ start pre-commit hook...               /
 start prepare-commit-msg hook...       /
 1.1s
 start commit-msg hook...               /
-\commit message is 'fix: fix some min-bugs
-'
+\commit message is 'some messages'
 this is commitMsg
 
 1.2s
