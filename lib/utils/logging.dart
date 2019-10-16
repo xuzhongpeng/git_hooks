@@ -1,18 +1,14 @@
-// Copyright (c) 2017, the Dart project authors.  Please see the AUTHORS file
+// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
 /// This library contains functionality to help command-line utilities to easily
 /// create aesthetic output.
-library cli_logging;
 
 import 'dart:async';
 import 'dart:io' as io;
 
-/// A small utility class to make it easier to work with common ANSI escape
-/// sequences.
 class Ansi {
-  /// Return whether the current stdout terminal supports ANSI escape sequences.
   static bool get terminalSupportsAnsi {
     return io.stdout.supportsAnsiEscapes &&
         io.stdioType(io.stdout) == io.StdioType.terminal;

@@ -1,7 +1,7 @@
-import 'dart:io';
+import "dart:io";
 import "package:path/path.dart" show dirname;
-import 'package:git_hooks/git_hooks.dart';
-import 'package:yaml/yaml.dart';
+import "package:git_hooks/git_hooks.dart";
+import "package:yaml/yaml.dart";
 
 class CreateHooks {
   Directory rootDir = Directory.current;

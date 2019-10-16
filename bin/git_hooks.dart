@@ -1,10 +1,10 @@
-import './runtime/run.dart' as m;
+import 'package:git_hooks/runtime/run.dart' as m;
 import './install/CreateHooks.dart';
 
-main(List<String> arguments) async {
-  if (arguments.length > 0) {
+main(List<String> arguments) {
+  if (arguments != null && arguments.length > 0) {
     String str = arguments[0];
-    if (arguments.length == 1) {
+    if (arguments?.length == 1) {
       if (str == 'create') {
         //安装的时候创建文件
         CreateHooks().copyFile();
