@@ -1,20 +1,15 @@
 import "dart:io";
-import "package:path/path.dart" as path;
-import "package:path/path.dart" show dirname;
 import "package:git_hooks/git_hooks.dart";
-import "package:yaml/yaml.dart";
+import "./hookTemplate.dart";
 
 class CreateHooks {
   Directory rootDir = Directory.current;
-  String nowDir = dirname(path.fromUri(Platform.script));
   Future<bool> copyFile() async {
-  print(nowDir);
-
     Logger logger = new Logger.standard();
     try {
-      var commonFile = new File(uri(nowDir + '/install/common'));
-      String commonStr = commonFile.readAsStringSync();
-      commonStr = _createHeader() + commonStr;
+      print(rootDir);
+      String commonStr = commonHook;
+      commonStr = createHeader() + commonStr;
       Directory gitDir = Directory(uri(rootDir.path + "/.git/"));
       String gitHookDir = uri(rootDir.path + "/.git/hooks/");
       if (!gitDir.existsSync()) {
@@ -29,15 +24,14 @@ class CreateHooks {
           await hookFile.create();
         }
         await hookFile.writeAsString(commonStr);
-        if(!Platform.isWindows){
-        await Process.run('chmod', ['777', path])
-            .catchError((onError) => print(onError));
+        if (!Platform.isWindows) {
+          await Process.run('chmod', ['777', path])
+              .catchError((onError) => print(onError));
         }
       }
       File hookFile = new File(uri(rootDir.path + '/git_hooks.dart'));
       if (!hookFile.existsSync()) {
-        File example = new File(uri(nowDir + '/install/git_hooks_example'));
-        String exampleStr = await example.readAsStringSync();
+        String exampleStr = userHooks;
         await hookFile.createSync();
         await hookFile.writeAsStringSync(exampleStr);
       }
@@ -48,28 +42,5 @@ class CreateHooks {
       print(e.toString());
       return false;
     }
-  }
-
-  String _createHeader() {
-    File f = new File(rootDir.path + "/pubspec.yaml");
-    String text = f.readAsStringSync();
-    Map yaml = loadYaml(text);
-    String name = yaml['name'];
-    String author = yaml['author'];
-    String version = yaml['version'];
-    String homepage = yaml['homepage'];
-    return '''
-#!/bin/sh
-# ${name}
-# Hook created by ${author}
-#   Version: ${version}
-#   At: ${DateTime.now()}
-#   See: ${homepage}#readme
-
-# From
-#   Directory: ${nowDir}
-#   Homepage: ${homepage}#readme
-
-''';
   }
 }

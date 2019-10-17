@@ -5,3 +5,7 @@
 ## 0.0.2
 
 - fix some min-bugs and improve readme.md
+
+## 0.0.3
+
+- improve readme.md

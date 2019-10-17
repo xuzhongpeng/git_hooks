@@ -10,8 +10,10 @@ Future<bool> commitMsg() async {
   Directory rootDir = Directory.current;
   File myFile = new File(uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
   String commitMsg = myFile.readAsStringSync();
+  print(commitMsg);
   if (commitMsg.startsWith('fix:')) {
     return false;
-  } else
+  } else {
     return false;
+  }
 }

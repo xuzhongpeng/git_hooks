@@ -43,6 +43,6 @@ final Map<String, String> hookList = {
   'sendemailValidate': 'sendemail-validate'
 };
 typedef Future<bool> UserBackFun();
-String uri(String file){
+String uri(String file) {
   return path.fromUri(path.toUri(file));
 }

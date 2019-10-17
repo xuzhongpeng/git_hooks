@@ -2,15 +2,14 @@ import 'package:git_hooks/runtime/run.dart' as m;
 import './install/CreateHooks.dart';
 import "package:yaml/yaml.dart";
 import 'package:git_hooks/utils/type.dart';
-
 import "dart:io";
 
 main(List<String> arguments) {
-  if (arguments != null && arguments.length > 0) {
+  if (arguments.isNotEmpty) {
     String str = arguments[0];
     if (arguments?.length == 1) {
       if (str == 'create') {
-        //安装的时候创建文件
+        //init files
         CreateHooks().copyFile();
       } else if (str == '-h' || str == '-help') {
         help();

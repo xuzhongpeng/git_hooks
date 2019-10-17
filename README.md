@@ -1,6 +1,6 @@
 # git_hooks
 
-![https://img.shields.io/github/license/xuzhongpeng/git_hooks](https://img.shields.io/github/license/xuzhongpeng/git_hooks) ![Pub](https://img.shields.io/pub/v/git_hooks)
+![https://img.shields.io/github/license/xuzhongpeng/git_hooks](https://img.shields.io/github/license/xuzhongpeng/git_hooks) ![Pub](https://img.shields.io/pub/v/git_hooks) ![](https://img.shields.io/powershellgallery/p/PackageManagement?color=%23)
 
 git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter!
 
@@ -90,6 +90,8 @@ Future<bool> preCommit() async {
 }
 ```
 
+If you want interrupt your commit or push,you can return false.Then you can return true if only nothing to do.
+
 add file to git
 
 ```
@@ -115,9 +117,10 @@ this is commitMsg
 
 ## Define our own hook functions
 
-You can use enum `Git` to Define more hooks functions. 
+You can use enum `Git` to Define more hooks functions.
 
 There is all hooks provide
+
 ```
 enum Git {
   applypatchMsg,
@@ -143,3 +146,28 @@ enum Git {
 ```
 
 You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks.
+
+You can define own function.For example,I want define a hook what can verify commit message starts with 'fix:'.
+
+`git_hooks.dart`
+
+```dart
+import "package:git_hooks/git_hooks.dart";
+import "dart:io";
+
+void main(List arguments) {
+  Map<Git, UserBackFun> params = {Git.preCommit: commitMsg};
+  change(arguments, params);
+}
+
+Future<bool> commitMsg() async {
+  Directory rootDir = Directory.current;
+  File myFile = new File(uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
+  String commitMsg = myFile.readAsStringSync();
+  if (commitMsg.startsWith('fix:')) {
+    return false;
+  } else
+    return false;
+}
+
+```
