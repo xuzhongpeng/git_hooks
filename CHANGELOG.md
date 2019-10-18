@@ -9,3 +9,7 @@
 ## 0.0.3
 
 - improve readme.md
+
+## 0.0.4
+
+- fix bug MacOS can not create files

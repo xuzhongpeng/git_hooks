@@ -15,8 +15,8 @@ program_exists() {
 error() {
   echo "\033[31m $1 \033[0m" 
 }
-if program_exists git_hooks; then
-  git_hooks run $hookName "$gitParams"
+if program_exists dart; then
+  dart ./git_hooks.dart $hookName
   if [ "$?" -ne "0" ];then
     exit 1
   fi
@@ -38,8 +38,9 @@ Future<bool> commitMsg() async {
   Directory rootDir = Directory.current;
   File myFile = new File(uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
   String commitMsg = myFile.readAsStringSync();
+  print("commit message is '${commitMsg}'");
   if (commitMsg.startsWith('fix:')) {
-    return false;
+    return false;// you can return true let commit go
   } else
     return false;
 }

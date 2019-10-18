@@ -1,15 +1,15 @@
 name: git_hooks
 description: Prevents bad commit or push (git hooks, pre-commit/precommit, pre-push/prepush, post-merge/postmerge and all that stuff...).
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/xuzhongpeng/git_hooks
-author: xuzhongpeng <1452754335@qq.com>
+author: xuzhongpeng <xuzhongpeng@foxmail.com>
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
-  path: ^1.6.4
-  yaml: ^2.2.0
+  path: ^1.6.0
+  yaml: ^2.1.0
 
 executables:
   git_hooks:
