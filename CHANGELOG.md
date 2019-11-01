@@ -13,3 +13,7 @@
 ## 0.0.4
 
 - fix bug MacOS can not create files
+
+## 0.0.5
+
+- add 'git_hooks uninstall' commands

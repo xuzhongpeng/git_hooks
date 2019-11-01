@@ -49,7 +49,7 @@ flutter pub get
 and
 
 ```
-pub global deactivate git_hooks
+git_hooks uninstall
 ```
 
 ## create files in .git/hooks

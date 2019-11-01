@@ -3,6 +3,7 @@ import './install/CreateHooks.dart';
 import "package:yaml/yaml.dart";
 import 'package:git_hooks/utils/type.dart';
 import "dart:io";
+import './uninstall/deleteFiles.dart';
 
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
@@ -20,6 +21,8 @@ main(List<String> arguments) {
         Map yaml = loadYaml(text);
         String version = yaml['version'];
         print("v" + version);
+      } else if (str == 'uninstall') {
+        deleteFiles();
       } else {
         print("'${str}' is not a git_hooks command,see follow");
         print('');

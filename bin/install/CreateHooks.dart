@@ -35,8 +35,8 @@ class CreateHooks {
         await hookFile.createSync();
         await hookFile.writeAsStringSync(exampleStr);
       }
+      print("All files wrote successful!");
       progress.finish(showTiming: true);
-      print("all files write success!");
       return true;
     } catch (e) {
       print(e.toString());
