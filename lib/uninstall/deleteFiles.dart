@@ -1,6 +1,5 @@
 import "dart:io";
 import "package:git_hooks/git_hooks.dart";
-import "../install/hookTemplate.dart";
 
 deleteFiles() async {
   Directory rootDir = Directory.current;

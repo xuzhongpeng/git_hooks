@@ -1,9 +1,10 @@
-import 'package:git_hooks/runtime/run.dart' as m;
-import './install/CreateHooks.dart';
-import "package:yaml/yaml.dart";
-import 'package:git_hooks/utils/type.dart';
 import "dart:io";
-import './uninstall/deleteFiles.dart';
+import "package:yaml/yaml.dart";
+
+import 'package:git_hooks/runtime/run.dart' as m;
+import 'package:git_hooks/install/create_hooks.dart';
+import 'package:git_hooks/utils/type.dart';
+import 'package:git_hooks/uninstall/deleteFiles.dart';
 
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
@@ -15,12 +16,11 @@ main(List<String> arguments) {
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        Directory rootDir = Directory.current;
-        File f = new File(uri(rootDir.path + "/pubspec.yaml"));
+        File f = new File(uri(getOwnPath() + "/pubspec.yaml"));
         String text = f.readAsStringSync();
         Map yaml = loadYaml(text);
         String version = yaml['version'];
-        print("v" + version);
+        print(version);
       } else if (str == 'uninstall') {
         deleteFiles();
       } else {
@@ -28,10 +28,12 @@ main(List<String> arguments) {
         print('');
         help();
       }
-    } else if (str == 'run') {
-      //运行的时候执行
-      m.run(arguments);
-    } else {
+    }
+    // else if (str == 'run') {
+    //   //运行的时候执行
+    //   m.run(arguments);
+    // }
+    else {
       print(
           "Too many positional arguments: 1 expected, but ${arguments.length} found");
       print('');

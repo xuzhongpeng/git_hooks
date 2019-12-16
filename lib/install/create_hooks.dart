@@ -1,13 +1,21 @@
 import "dart:io";
 import "package:git_hooks/git_hooks.dart";
-import "./hookTemplate.dart";
+import "./hook_template.dart";
+import 'package:path/path.dart';
 
 class CreateHooks {
   Directory rootDir = Directory.current;
-  Future<bool> copyFile() async {
+  Future<bool> copyFile({String realPath}) async {
+    if (realPath == null) {
+      realPath = './git_hooks.dart';
+    } else {
+      if (!realPath.endsWith(".dart")) {
+        print("the file what you want to create is not a dart file");
+        exit(1);
+      }
+    }
     Logger logger = new Logger.standard();
     try {
-      print(rootDir);
       String commonStr = commonHook;
       commonStr = createHeader() + commonStr;
       Directory gitDir = Directory(uri(rootDir.path + "/.git/"));
@@ -29,7 +37,7 @@ class CreateHooks {
               .catchError((onError) => print(onError));
         }
       }
-      File hookFile = new File(uri(rootDir.path + '/git_hooks.dart'));
+      File hookFile = new File(uri(absolute(rootDir.path, realPath)));
       if (!hookFile.existsSync()) {
         String exampleStr = userHooks;
         await hookFile.createSync();

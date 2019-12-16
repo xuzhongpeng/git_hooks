@@ -4,7 +4,7 @@ homepage: https://github.com/xuzhongpeng/git_hooks
 author: xuzhongpeng <1452754335@qq.com>
 
 environment:
-  sdk: '>=2.4.0 <3.0.0'
+  sdk: '>=2.1.0 <3.0.0'
 
 dev_dependencies:
   git_hooks:
