@@ -1,12 +1,13 @@
 import "dart:io";
 import "package:git_hooks/git_hooks.dart";
+import 'package:git_hooks/utils/utils.dart';
 
 deleteFiles() async {
   Directory rootDir = Directory.current;
   Logger logger = new Logger.standard();
 
-  Directory gitDir = Directory(uri(rootDir.path + "/.git/"));
-  String gitHookDir = uri(rootDir.path + "/.git/hooks/");
+  Directory gitDir = Directory(Utils.uri(rootDir.path + "/.git/"));
+  String gitHookDir = Utils.uri(rootDir.path + "/.git/hooks/");
   if (!gitDir.existsSync()) {
     print(gitDir.path);
     throw new ArgumentError('.git is not exists in your project');
@@ -19,7 +20,7 @@ deleteFiles() async {
       await hookFile.delete();
     }
   }
-  File hookFile = new File(uri(rootDir.path + '/git_hooks.dart'));
+  File hookFile = new File(Utils.uri(rootDir.path + '/git_hooks.dart'));
   if (hookFile.existsSync()) {
     await hookFile.delete();
     print("git_hooks.dart deleted successfully!");

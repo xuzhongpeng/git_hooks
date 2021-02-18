@@ -1,38 +1,37 @@
 import "dart:io";
+import 'package:git_hooks/runtime/git_hooks.dart';
+import 'package:git_hooks/utils/utils.dart';
 import "package:yaml/yaml.dart";
 
-import 'package:git_hooks/runtime/run.dart' as m;
 import 'package:git_hooks/install/create_hooks.dart';
-import 'package:git_hooks/utils/type.dart';
-import 'package:git_hooks/uninstall/deleteFiles.dart';
 
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
     String str = arguments[0];
-    if (arguments?.length == 1) {
+    if (arguments != null && arguments.length >= 1) {
       if (str == 'create') {
         //init files
-        CreateHooks().copyFile();
+        String targetPath = arguments[1];
+        if (targetPath != null && targetPath.endsWith(".dart")) {
+          CreateHooks.copyFile(targetPath: targetPath);
+        } else
+          CreateHooks.copyFile();
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        File f = new File(uri(getOwnPath() + "/pubspec.yaml"));
+        File f = new File(Utils.uri(Utils.getOwnPath() + "/pubspec.yaml"));
         String text = f.readAsStringSync();
         Map yaml = loadYaml(text);
         String version = yaml['version'];
         print(version);
       } else if (str == 'uninstall') {
-        deleteFiles();
+        GitHooks.unInstall();
       } else {
         print("'${str}' is not a git_hooks command,see follow");
         print('');
         help();
       }
     }
-    // else if (str == 'run') {
-    //   //运行的时候执行
-    //   m.run(arguments);
-    // }
     else {
       print(
           "Too many positional arguments: 1 expected, but ${arguments.length} found");
@@ -49,7 +48,7 @@ main(List<String> arguments) {
 void help() {
   print("Common commands:");
   print("");
-  print(" git_hooks create");
+  print(" git_hooks create {{targetPath}}");
   print("   Create hooks files in '.git/hooks'");
   print("");
 }

@@ -1,48 +1,61 @@
 import "package:yaml/yaml.dart";
 import "dart:io";
 
-const commonHook = r"""
-hookName=`basename "$0"`
-gitParams="$*"
+String commonHook(String path) => """
+hookName=`basename "\$0"`
+gitParams="\$*"
 program_exists() {
     local ret='0'
-    command -v $1 >/dev/null 2>&1 || { local ret='1'; }
-    if [ "$ret" -ne 0 ]; then
+    command -v \$1 >/dev/null 2>&1 || { local ret='1'; }
+    if [ "\$ret" -ne 0 ]; then
         return 1
     fi
     return 0
 }
 error() {
-  echo "\033[31m $1 \033[0m" 
+  echo "\033[31m \$1 \033[0m" 
 }
 if program_exists dart; then
-  dart ./git_hooks.dart $hookName
-  if [ "$?" -ne "0" ];then
+  dart ${path} \$hookName
+  if [ "\$?" -ne "0" ];then
     exit 1
   fi
 else
-  error "Can't find git_hooks, skipping $hookName hook"
+  error "Can't find git_hooks, skipping \$hookName hook"
   echo "you can write \033[33mgit_hooks:any\033[0m in pubspec.yaml and using 'pub get' to install"
 fi
 """;
 const userHooks = r"""
 import "package:git_hooks/git_hooks.dart";
-import "dart:io";
+// import "dart:io";
 
 void main(List arguments) {
-  Map<Git, UserBackFun> params = {Git.commitMsg: commitMsg};
-  change(arguments, params);
+  Map<Git, UserBackFun> params = {
+    Git.commitMsg: commitMsg,
+    Git.preCommit: preCommit
+  };
+  GitHooks.call(arguments, params);
 }
 
 Future<bool> commitMsg() async {
-  Directory rootDir = Directory.current;
-  File myFile = new File(uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
-  String commitMsg = myFile.readAsStringSync();
-  print("commit message is '${commitMsg}'");
-  if (commitMsg.startsWith('fix:')) {
-    return false;// you can return true let commit go
-  } else
-    return false;
+  // String rootDir = Directory.current.path;
+  // String commitMsg = Utils.getCommitEditMsg();
+  // if (commitMsg.startsWith('fix:')) {
+  //   return true; // you can return true let commit go
+  // } else
+  //   return false;
+  return true;
+}
+
+Future<bool> preCommit() async {
+  // try {
+  //   ProcessResult result = await Process.run('dartanalyzer', ['bin']);
+  //   print(result.stdout);
+  //   if (result.exitCode != 0) return false;
+  // } catch (e) {
+  //   return false;
+  // }
+  return true;
 }
 """;
 
@@ -57,6 +70,7 @@ String createHeader() {
   String homepage = yaml['homepage'];
   return '''
 #!/bin/sh
+# !!!don't edit this file
 # ${name}
 # Hook created by ${author}
 #   Version: ${version}

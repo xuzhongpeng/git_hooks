@@ -8,7 +8,7 @@ git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flut
 
 ```
 dev_dependencies:
-  git_hooks: ^0.0.1
+  git_hooks: ^0.1.0
 ```
 
 then
@@ -23,17 +23,11 @@ or
 flutter pub get
 ```
 
-and then activate it in shell
-
-```
-pub global activate git_hooks
-```
-
 ## Uninstall
 
 ```
 dev_dependencies:
-  - git_hooks: ^0.0.1
+  - git_hooks: ^0.1.0
 ```
 
 ```
@@ -53,48 +47,82 @@ git_hooks uninstall
 ```
 
 ## create files in .git/hooks
+Here has two ways
 
-We can create git hooks with
+1. Using `git_hooks` command
+
+activate `git_hooks` in shell
 
 ```
-git_hooks create
+pub global activate git_hooks
+```
+Now,we can let the `git hooks` bring into effect
+```
+git_hooks create bin/git_hooks.dart
 ```
 
-It will create some hooks files in .git/hooks. You can check whether the installation is correct by judging whether the file(".git/hooks/commit-msg" and other fils) exists.
+2. Using dart code:
+
+create `main.dart` file in `/bin/`
+```dart
+void main() async{
+  GitHooks.init(targetPath: "bin/git_hooks.dart");
+}
+```
+then `dart bin/main.dart` in shell.
+
+It will create some hooks files in `.git/hooks`. You can check whether the installation is correct by judging whether the file(".git/hooks/commit-msg" and other fils) exists.
 
 It will create a file `git_hooks.dart` in your project root directory.
 
+## Notion
+
+`Target File`: The file that the git hooks points to. It is `/git_hooks.dart` as default.
+
+`Git hook command file`: The Git hooks file. Such as `/.git/hooks/commit-msg`.
 ## Using
 
 You can change `git_hooks.dart`
 
 ```dart
+import "package:git_hooks/git_hooks.dart";
+import "dart:io";
+
 void main(List arguments) {
   Map<Git, UserBackFun> params = {
     Git.commitMsg: commitMsg,
     Git.preCommit: preCommit
   };
-  change(arguments, params);
+  GitHooks.call(arguments, params);
 }
 
 Future<bool> commitMsg() async {
-  Directory rootDir = Directory.current;
-  File myFile = new File(rootDir.path + "/.git/COMMIT_EDITMSG");
-  print("commit message is '${myFile.readAsStringSync()}'");
-  print('this is commitMsg');
-  return false;
+  String rootDir = Directory.current.path;
+  String commitMsg = Utils.getCommitEditMsg();
+  if (commitMsg.startsWith('fix:')) {
+    return true; // you can return true let commit go
+  } else
+    return false;
 }
+
 Future<bool> preCommit() async {
-  print('this is pre-commit');
+  try {
+    ProcessResult result = await Process.run('dartanalyzer', ['bin']);
+    print(result.stdout);
+    if (result.exitCode != 0) return false;
+  } catch (e) {
+    return false;
+  }
   return true;
 }
+
 ```
 
 If you want interrupt your commit or push,you can return false.Then you can return true if only nothing to do.
 
 add file to git
 
-```
+```shell
 git add .
 git commit -m 'some messages'
 ```
@@ -147,28 +175,24 @@ enum Git {
 
 You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks.
 
-You can define own function.For example,I want define a hook what can verify commit message starts with 'fix:'.
+## Debugging dart codes
 
-`git_hooks.dart`
+If you debugging `pre-commit` hooks.
 
-```dart
-import "package:git_hooks/git_hooks.dart";
-import "dart:io";
+You can execute `dart {{targetFile}} pre-commit`.
 
-void main(List arguments) {
-  Map<Git, UserBackFun> params = {Git.preCommit: commitMsg};
-  change(arguments, params);
+or add Configuration in VSCode
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "debugger git hooks",
+      "program": "git_hooks.dart",//your targetFile
+      "request": "launch",
+      "type": "dart",
+      "args": ["pre-commit"] // hooks argument
+    }
+  ]
 }
-
-Future<bool> commitMsg() async {
-  Directory rootDir = Directory.current;
-  File myFile = new File(uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
-  String commitMsg = myFile.readAsStringSync();
-  print("commit message is '${commitMsg}'");
-  if (commitMsg.startsWith('fix:')) {
-    return false;
-  } else
-    return false;
-}
-
 ```
