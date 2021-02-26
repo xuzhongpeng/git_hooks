@@ -1,5 +1,6 @@
-import 'package:path/path.dart' as path;
 import 'dart:io';
+
+import 'package:path/path.dart' as path;
 
 typedef Future<bool> UserBackFun();
 
@@ -7,13 +8,14 @@ class Utils {
   static String uri(String file) {
     return path.fromUri(path.toUri(file));
   }
-  /// get path of git_hooks library 
-  static String getOwnPath() {
+
+  /// get path of git_hooks library
+  static String? getOwnPath() {
     String pacPath = path.fromUri(path.current + '/.packages');
     File pac = File(pacPath);
     String a = pac.readAsStringSync();
     List<String> b = a.split('\n');
-    String resPath;
+    late String resPath;
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         int index = v.indexOf(':');

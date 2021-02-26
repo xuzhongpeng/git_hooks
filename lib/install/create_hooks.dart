@@ -1,14 +1,16 @@
 import "dart:io";
+
 import "package:git_hooks/git_hooks.dart";
 import 'package:git_hooks/utils/utils.dart';
-import "./hook_template.dart";
 import 'package:path/path.dart';
+
+import "./hook_template.dart";
 
 typedef HooksCommandFile = Future<bool> Function(File file);
 
 class CreateHooks {
   static String rootDir = Directory.current.path;
-  static Future<bool> copyFile({String targetPath}) async {
+  static Future<bool> copyFile({String? targetPath}) async {
     if (targetPath == null) {
       targetPath = '/git_hooks.dart';
     } else {
@@ -37,8 +39,8 @@ class CreateHooks {
       });
       if (!hookFile.existsSync()) {
         String exampleStr = userHooks;
-        await hookFile.createSync(recursive: true);
-        await hookFile.writeAsStringSync(exampleStr);
+        hookFile.createSync(recursive: true);
+        hookFile.writeAsStringSync(exampleStr);
       }
       print("All files wrote successful!");
       progress.finish(showTiming: true);
@@ -50,12 +52,12 @@ class CreateHooks {
   }
 
   static Future<String> getTargetFilePath() async {
-    Logger logger = new Logger.standard();
     String commandPath = '';
     await _hooksCommand((hookFile) async {
       String hookTemplate = hookFile.readAsStringSync();
-      var match= RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
-      commandPath = match.group(1);
+      final match =
+          RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
+      commandPath = match!.group(1)!;
       return false;
     });
     return commandPath;

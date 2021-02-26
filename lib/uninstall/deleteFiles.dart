@@ -1,4 +1,5 @@
 import "dart:io";
+
 import "package:git_hooks/git_hooks.dart";
 import 'package:git_hooks/utils/utils.dart';
 
