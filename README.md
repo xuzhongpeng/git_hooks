@@ -1,6 +1,8 @@
 # git_hooks
 
-![https://img.shields.io/github/license/xuzhongpeng/git_hooks](https://img.shields.io/github/license/xuzhongpeng/git_hooks) ![Pub](https://img.shields.io/pub/v/git_hooks) ![](https://img.shields.io/powershellgallery/p/PackageManagement?color=%23)
+![https://img.shields.io/github/license/xuzhongpeng/git_hooks](https://img.shields.io/github/license/xuzhongpeng/git_hooks)
+[![Pub](https://img.shields.io/pub/v/git_hooks)](https://pub.dev/packages/git_hooks)
+[![Star](https://img.shields.io/github/stars/xuzhongpeng/git_hooks)](https://github.com/xuzhongpeng/git_hooks)
 
 git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter!
 
@@ -175,7 +177,7 @@ enum Git {
 
 You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks.
 
-## Debugging dart codes
+## Debugging hooks code with VSCode
 
 If you debugging `pre-commit` hooks.
 

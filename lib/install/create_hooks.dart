@@ -50,7 +50,6 @@ class CreateHooks {
   }
 
   static Future<String> getTargetFilePath() async {
-    Logger logger = new Logger.standard();
     String commandPath = '';
     await _hooksCommand((hookFile) async {
       String hookTemplate = hookFile.readAsStringSync();
