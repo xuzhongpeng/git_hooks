@@ -1,3 +1,5 @@
+## 0.1.1
+- improve package pubspec.yaml
 ## 0.1.0
 - add `GitHooks.init` to create git hooks by using dart code
 - add `targetFile` argument.

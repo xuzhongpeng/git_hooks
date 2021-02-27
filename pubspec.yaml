@@ -1,14 +1,14 @@
 name: git_hooks
 description: Using dart to prevents bad commit or push (git hooks, pre-commit/precommit, pre-push/prepush, post-merge/postmerge and all that stuff...).
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/xuzhongpeng/git_hooks
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
-  path: ^1.6.0
-  yaml: ^2.1.0
+  path: ^1.7.0
+  yaml: ^2.2.1
 
 executables:
   git_hooks:

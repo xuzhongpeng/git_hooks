@@ -8,14 +8,15 @@ import 'package:git_hooks/install/create_hooks.dart';
 main(List<String> arguments) {
   if (arguments.isNotEmpty) {
     String str = arguments[0];
-    if (arguments != null && arguments.length >= 1) {
+    if (arguments != null && arguments.isNotEmpty) {
       if (str == 'create') {
         //init files
         String targetPath = arguments[1];
         if (targetPath != null && targetPath.endsWith(".dart")) {
           CreateHooks.copyFile(targetPath: targetPath);
-        } else
+        } else {
           CreateHooks.copyFile();
+        }
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
@@ -31,8 +32,7 @@ main(List<String> arguments) {
         print('');
         help();
       }
-    }
-    else {
+    } else {
       print(
           "Too many positional arguments: 1 expected, but ${arguments.length} found");
       print('');
