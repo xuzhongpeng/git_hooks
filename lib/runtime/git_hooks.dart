@@ -19,7 +19,9 @@ class GitHooks {
         '--source',
         'path',
         Utils.getOwnPath()
-      ]).catchError((onError) => print(onError));
+      ]).catchError((onError) {
+        print(onError);
+      });
       print(result.stdout);
       if (result.stderr.length != 0) {
         print(_ansi.error(result.stderr));
