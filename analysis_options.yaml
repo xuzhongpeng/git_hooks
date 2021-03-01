@@ -2,6 +2,7 @@ include: package:pedantic/analysis_options.1.9.0.yaml
 # https://dart-lang.github.io/linter/lints/
 analyzer:
   exclude: 
+    - example/**
     - build/**
     - lib/utils/logging.dart
     - lib/utils/type.dart
