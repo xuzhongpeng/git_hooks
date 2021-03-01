@@ -5,13 +5,13 @@ import '../git_hooks.dart';
 import './hook_template.dart';
 import 'package:path/path.dart';
 
-typedef HooksCommandFile = Future<bool> Function(File file);
+typedef _HooksCommandFile = Future<bool> Function(File file);
 String _rootDir = Directory.current.path;
 
 /// install hooks
 class CreateHooks {
   /// Create files to `.git/hooks` and [targetPath]
-  static Future<bool> copyFile({String targetPath}) async {
+  static Future<bool> copyFile({String? targetPath}) async {
     if (targetPath == null) {
       targetPath = '/git_hooks.dart';
     } else {
@@ -40,8 +40,8 @@ class CreateHooks {
       });
       if (!hookFile.existsSync()) {
         var exampleStr = userHooks;
-        await hookFile.createSync(recursive: true);
-        await hookFile.writeAsStringSync(exampleStr);
+        hookFile.createSync(recursive: true);
+        hookFile.writeAsStringSync(exampleStr);
       }
       print('All files wrote successful!');
       progress.finish(showTiming: true);
@@ -60,13 +60,13 @@ class CreateHooks {
       var hookTemplate = hookFile.readAsStringSync();
       var match =
           RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
-      commandPath = match.group(1);
+      commandPath = match.group(1) ?? '';
       return false;
     });
     return commandPath;
   }
 
-  static Future<void> _hooksCommand(HooksCommandFile callBack) async {
+  static Future<void> _hooksCommand(_HooksCommandFile callBack) async {
     var gitDir = Directory(Utils.uri(_rootDir + '/.git/'));
     var gitHookDir = Utils.uri(_rootDir + '/.git/hooks/');
     if (!gitDir.existsSync()) {

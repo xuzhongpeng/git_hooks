@@ -1,6 +1,6 @@
-import 'package:path/path.dart' as path;
 import 'dart:io';
-
+import 'package:path/path.dart' as path;
+/// return bool function
 typedef UserBackFun = Future<bool> Function();
 
 /// utils class
@@ -11,12 +11,12 @@ class Utils {
   }
 
   /// get path of git_hooks library
-  static String getOwnPath() {
+  static String? getOwnPath() {
     var pacPath = path.fromUri(path.current + '/.packages');
     var pac = File(pacPath);
     var a = pac.readAsStringSync();
     var b = a.split('\n');
-    String resPath;
+    var resPath = '';
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         var index = v.indexOf(':');
@@ -24,14 +24,17 @@ class Utils {
         resPath = v.substring(index + 1, lastIndex);
       }
     });
-    resPath = path.fromUri(resPath);
-    if (path.isRelative(resPath)) {
-      resPath = path.canonicalize(resPath);
+    if (resPath.isNotEmpty) {
+      resPath = path.fromUri(resPath);
+      if (path.isRelative(resPath)) {
+        resPath = path.canonicalize(resPath);
+      }
+      if (!Directory(resPath).existsSync()) {
+        return null;
+      }
+      return resPath;
     }
-    if (!Directory(resPath).existsSync()) {
-      return null;
-    }
-    return resPath;
+    return null;
   }
 
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
