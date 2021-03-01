@@ -2,23 +2,25 @@ import 'package:path/path.dart' as path;
 import 'dart:io';
 
 typedef UserBackFun = Future<bool> Function();
+
 /// utils class
 class Utils {
   /// check the file Path
   static String uri(String filePath) {
     return path.fromUri(path.toUri(filePath));
   }
-  /// get path of git_hooks library 
+
+  /// get path of git_hooks library
   static String getOwnPath() {
-    String pacPath = path.fromUri(path.current + '/.packages');
-    File pac = File(pacPath);
-    String a = pac.readAsStringSync();
-    List<String> b = a.split('\n');
+    var pacPath = path.fromUri(path.current + '/.packages');
+    var pac = File(pacPath);
+    var a = pac.readAsStringSync();
+    var b = a.split('\n');
     String resPath;
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
-        int index = v.indexOf(':');
-        int lastIndex = v.lastIndexOf('lib');
+        var index = v.indexOf(':');
+        var lastIndex = v.lastIndexOf('lib');
         resPath = v.substring(index + 1, lastIndex);
       }
     });
@@ -34,9 +36,9 @@ class Utils {
 
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
   static String getCommitEditMsg() {
-    Directory rootDir = Directory.current;
-    File myFile = new File(Utils.uri('${rootDir.path}/.git/COMMIT_EDITMSG'));
-    String commitMsg = myFile.readAsStringSync();
+    var rootDir = Directory.current;
+    var myFile = File(Utils.uri('${rootDir.path}/.git/COMMIT_EDITMSG'));
+    var commitMsg = myFile.readAsStringSync();
     return commitMsg;
   }
 }

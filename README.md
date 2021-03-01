@@ -4,7 +4,7 @@
 [![Pub](https://img.shields.io/pub/v/git_hooks)](https://pub.dev/packages/git_hooks)
 [![Star](https://img.shields.io/github/stars/xuzhongpeng/git_hooks)](https://github.com/xuzhongpeng/git_hooks)
 
-git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter!
+git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter! It is similar to husky.
 
 ## Install
 
@@ -175,7 +175,7 @@ enum Git {
 }
 ```
 
-You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks.
+You can click [here](https://git-scm.com/docs/githooks.html) to learn more about git hooks. 
 
 ## Debugging hooks code with VSCode
 

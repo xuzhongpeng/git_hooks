@@ -20,11 +20,11 @@ class CreateHooks {
         exit(1);
       }
     }
-    targetPath = '${_rootDir}/${targetPath}';
-    var hookFile = File(Utils.uri(absolute(_rootDir, targetPath)));
+    var relativePath = '${_rootDir}/${targetPath}';
+    var hookFile = File(Utils.uri(absolute(_rootDir, relativePath)));
     var logger = Logger.standard();
     try {
-      var commonStr = commonHook(targetPath);
+      var commonStr = commonHook(Utils.uri(targetPath));
       commonStr = createHeader() + commonStr;
       var progress = logger.progress('create files');
       await _hooksCommand((hookFile) async {
@@ -55,9 +55,9 @@ class CreateHooks {
   /// get target file path.
   /// returns the path that the git hooks points to.
   static Future<String> getTargetFilePath() async {
-    String commandPath = '';
+    var commandPath = '';
     await _hooksCommand((hookFile) async {
-      String hookTemplate = hookFile.readAsStringSync();
+      var hookTemplate = hookFile.readAsStringSync();
       var match =
           RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
       commandPath = match.group(1);
@@ -67,13 +67,13 @@ class CreateHooks {
   }
 
   static Future<void> _hooksCommand(HooksCommandFile callBack) async {
-    Directory gitDir = Directory(Utils.uri(_rootDir + '/.git/'));
-    String gitHookDir = Utils.uri(_rootDir + '/.git/hooks/');
+    var gitDir = Directory(Utils.uri(_rootDir + '/.git/'));
+    var gitHookDir = Utils.uri(_rootDir + '/.git/hooks/');
     if (!gitDir.existsSync()) {
       throw ArgumentError('.git is not exists in your project');
     }
     for (var hook in hookList.values) {
-      String path = gitHookDir + hook;
+      var path = gitHookDir + hook;
       var hookFile = File(path);
       if (!await callBack(hookFile)) {
         return;

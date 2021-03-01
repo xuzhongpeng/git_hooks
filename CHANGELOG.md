@@ -1,3 +1,5 @@
+## 0.1.3
+- hooks command using relative path from project
 ## 0.1.2
 - add api docs
 - fix hooks command error from macos: 'cannot find dart from PATH'

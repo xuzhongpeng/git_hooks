@@ -93,7 +93,7 @@ abstract class Progress {
   final String message;
   final Stopwatch _stopwatch;
 
-  Progress(this.message) : _stopwatch = new Stopwatch()..start();
+  Progress(this.message) : _stopwatch = Stopwatch()..start();
 
   Duration get elapsed => _stopwatch.elapsed;
 
@@ -109,7 +109,7 @@ class StandardLogger implements Logger {
   Ansi ansi;
 
   StandardLogger({this.ansi}) {
-    ansi ??= new Ansi(Ansi.terminalSupportsAnsi);
+    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
   }
 
   @override
@@ -151,8 +151,8 @@ class StandardLogger implements Logger {
     }
 
     Progress progress = ansi.useAnsi
-        ? new AnsiProgress(ansi, message)
-        : new SimpleProgress(this, message);
+        ? AnsiProgress(ansi, message)
+        : SimpleProgress(this, message);
     _currentProgress = progress;
     return progress;
   }
@@ -187,7 +187,7 @@ class AnsiProgress extends Progress {
   AnsiProgress(this.ansi, String message) : super(message) {
     io.stdout.write('${message}...  '.padRight(40));
 
-    _timer = new Timer.periodic(new Duration(milliseconds: 80), (t) {
+    _timer = Timer.periodic(Duration(milliseconds: 80), (t) {
       _index++;
       _updateDisplay();
     });
@@ -241,10 +241,10 @@ class VerboseLogger implements Logger {
   Stopwatch _timer;
 
   VerboseLogger({this.ansi, this.logTime}) {
-    ansi ??= new Ansi(Ansi.terminalSupportsAnsi);
+    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
     logTime ??= false;
 
-    _timer = new Stopwatch()..start();
+    _timer = Stopwatch()..start();
   }
 
   bool get isVerbose => true;
@@ -261,7 +261,7 @@ class VerboseLogger implements Logger {
     io.stdout.writeln('${_createPrefix()}${ansi.gray}$message${ansi.none}');
   }
 
-  Progress progress(String message) => new SimpleProgress(this, message);
+  Progress progress(String message) => SimpleProgress(this, message);
 
   @Deprecated('This method will be removed in the future')
   void flush() {}
@@ -275,7 +275,7 @@ class VerboseLogger implements Logger {
     int minutes = seconds ~/ 60;
     seconds -= minutes * 60.0;
 
-    StringBuffer buf = new StringBuffer();
+    StringBuffer buf = StringBuffer();
     if (minutes > 0) {
       buf.write((minutes % 60));
       buf.write('m ');

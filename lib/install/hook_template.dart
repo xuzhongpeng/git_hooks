@@ -3,7 +3,7 @@ import 'dart:io';
 
 /// hooks template
 String commonHook(String path) {
-  String temp = '';
+  var temp = '';
   if (Platform.isMacOS) {
     temp += 'source ~/.bash_profile\n';
   }
@@ -68,9 +68,9 @@ Future<bool> preCommit() async {
 
 /// hooks header
 String createHeader() {
-  Directory rootDir = Directory.current;
-  File f = File(rootDir.path + '/pubspec.yaml');
-  String text = f.readAsStringSync();
+  var rootDir = Directory.current;
+  var f = File(rootDir.path + '/pubspec.yaml');
+  var text = f.readAsStringSync();
   Map yaml = loadYaml(text);
   String name = yaml['name'] ?? '';
   String author = yaml['author'] ?? '';

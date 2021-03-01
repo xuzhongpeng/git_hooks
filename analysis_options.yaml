@@ -12,7 +12,5 @@ analyzer:
     public_member_api_docs: warning
 linter:
   rules:
-    omit_local_variable_types: false
-    unnecessary_new: false
     public_member_api_docs: true
     # - package_api_docs
