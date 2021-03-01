@@ -58,13 +58,13 @@ class Ansi {
 /// standard status messages, trace level output, and indeterminate progress.
 abstract class Logger {
   /// Create a normal [Logger]; this logger will not display trace level output.
-  factory Logger.standard({Ansi ansi}) => new StandardLogger(ansi: ansi);
+  factory Logger.standard({Ansi ansi}) => StandardLogger(ansi: ansi);
 
   /// Create a [Logger] that will display trace level output.
   ///
   /// If [logTime] is `true`, this logger will display the time of the message.
-  factory Logger.verbose({Ansi ansi, bool logTime: true}) {
-    return new VerboseLogger(ansi: ansi, logTime: logTime);
+  factory Logger.verbose({Ansi ansi, bool logTime = true}) {
+    return VerboseLogger(ansi: ansi, logTime: logTime);
   }
 
   Ansi get ansi;
@@ -105,16 +105,19 @@ abstract class Progress {
 }
 
 class StandardLogger implements Logger {
+  @override
   Ansi ansi;
 
   StandardLogger({this.ansi}) {
     ansi ??= new Ansi(Ansi.terminalSupportsAnsi);
   }
 
+  @override
   bool get isVerbose => false;
 
   Progress _currentProgress;
 
+  @override
   void stderr(String message) {
     if (_currentProgress != null) {
       Progress progress = _currentProgress;
@@ -125,6 +128,7 @@ class StandardLogger implements Logger {
     io.stderr.writeln(message);
   }
 
+  @override
   void stdout(String message) {
     if (_currentProgress != null) {
       Progress progress = _currentProgress;
@@ -135,8 +139,10 @@ class StandardLogger implements Logger {
     print(message);
   }
 
+  @override
   void trace(String message) {}
 
+  @override
   Progress progress(String message) {
     if (_currentProgress != null) {
       Progress progress = _currentProgress;
@@ -151,6 +157,7 @@ class StandardLogger implements Logger {
     return progress;
   }
 
+  @override
   @Deprecated('This method will be removed in the future')
   void flush() {}
 }

@@ -1,0 +1,17 @@
+include: package:pedantic/analysis_options.1.9.0.yaml
+# https://dart-lang.github.io/linter/lints/
+analyzer:
+  exclude: 
+    - build/**
+    - lib/utils/logging.dart
+    - lib/utils/type.dart
+  errors:
+    unused_import: warning
+    unused_local_variable: warning
+    public_member_api_docs: warning
+linter:
+  rules:
+    omit_local_variable_types: false
+    unnecessary_new: false
+    public_member_api_docs: true
+    # - package_api_docs

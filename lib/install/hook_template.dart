@@ -1,19 +1,22 @@
-import "package:yaml/yaml.dart";
-import "dart:io";
+import 'package:yaml/yaml.dart';
+import 'dart:io';
 
-String commonHook(String path) => """
+/// hooks template
+String commonHook(String path) {
+  String temp = '';
+  if (Platform.isMacOS) {
+    temp += 'source ~/.bash_profile\n';
+  }
+  temp += '''
 hookName=`basename "\$0"`
 gitParams="\$*"
 program_exists() {
-    local ret='0'
-    command -v \$1 >/dev/null 2>&1 || { local ret='1'; }
+    local ret="0"
+    command -v \$1 >/dev/null 2>&1 || { local ret="1"; }
     if [ "\$ret" -ne 0 ]; then
         return 1
     fi
     return 0
-}
-error() {
-  echo "\033[31m \$1 \033[0m" 
 }
 if program_exists dart; then
   dart ${path} \$hookName
@@ -21,13 +24,17 @@ if program_exists dart; then
     exit 1
   fi
 else
-  error "Can't find git_hooks, skipping \$hookName hook"
-  echo "you can write \033[33mgit_hooks:any\033[0m in pubspec.yaml and using 'pub get' to install"
+  echo "git_hooks > \$hookName"
+  echo "Cannot find dart in PATH"
 fi
-""";
-const userHooks = r"""
-import "package:git_hooks/git_hooks.dart";
-// import "dart:io";
+''';
+  return temp;
+}
+
+/// dart code template
+const userHooks = r'''
+import 'package:git_hooks/git_hooks.dart';
+// import 'dart:io';
 
 void main(List arguments) {
   Map<Git, UserBackFun> params = {
@@ -57,20 +64,21 @@ Future<bool> preCommit() async {
   // }
   return true;
 }
-""";
+''';
 
+/// hooks header
 String createHeader() {
   Directory rootDir = Directory.current;
-  File f = new File(rootDir.path + "/pubspec.yaml");
+  File f = File(rootDir.path + '/pubspec.yaml');
   String text = f.readAsStringSync();
   Map yaml = loadYaml(text);
-  String name = yaml['name'];
-  String author = yaml['author'];
-  String version = yaml['version'];
-  String homepage = yaml['homepage'];
+  String name = yaml['name'] ?? '';
+  String author = yaml['author'] ?? '';
+  String version = yaml['version'] ?? '';
+  String homepage = yaml['homepage'] ?? '';
   return '''
 #!/bin/sh
-# !!!don't edit this file
+# !!!don"t edit this file
 # ${name}
 # Hook created by ${author}
 #   Version: ${version}

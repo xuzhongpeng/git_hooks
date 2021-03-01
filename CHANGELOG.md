@@ -1,3 +1,6 @@
+## 0.1.2
+- add api docs
+- fix hooks command error from macos: 'cannot find dart from PATH'
 ## 0.1.1
 - improve package pubspec.yaml
 ## 0.1.0

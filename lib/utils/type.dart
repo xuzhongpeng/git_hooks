@@ -1,4 +1,4 @@
-
+/// all git hooks from [git hooks documentation](https://git-scm.com/docs/githooks.html)
 enum Git {
   applypatchMsg,
   preApplypatch,
@@ -20,6 +20,7 @@ enum Git {
   postRewrite,
   sendemailValidate
 }
+/// enum to git hooks types
 final Map<String, String> hookList = {
   'applypatchMsg': 'applypatch-msg',
   'preApplypatch': 'pre-applypatch',

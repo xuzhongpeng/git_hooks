@@ -1,11 +1,12 @@
 import 'package:path/path.dart' as path;
 import 'dart:io';
 
-typedef Future<bool> UserBackFun();
-
+typedef UserBackFun = Future<bool> Function();
+/// utils class
 class Utils {
-  static String uri(String file) {
-    return path.fromUri(path.toUri(file));
+  /// check the file Path
+  static String uri(String filePath) {
+    return path.fromUri(path.toUri(filePath));
   }
   /// get path of git_hooks library 
   static String getOwnPath() {
@@ -34,7 +35,7 @@ class Utils {
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
   static String getCommitEditMsg() {
     Directory rootDir = Directory.current;
-    File myFile = new File(Utils.uri("${rootDir.path}/.git/COMMIT_EDITMSG"));
+    File myFile = new File(Utils.uri('${rootDir.path}/.git/COMMIT_EDITMSG'));
     String commitMsg = myFile.readAsStringSync();
     return commitMsg;
   }
