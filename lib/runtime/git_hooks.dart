@@ -19,8 +19,9 @@ class GitHooks {
         '--source',
         'path',
         Utils.getOwnPath()!
-      // ignore: return_of_invalid_type_from_catch_error
-      ]).catchError((onError) => print(onError));
+      ]).catchError((onError) {
+        print(onError);
+      });
       print(result.stdout);
       if (result.stderr.length != 0) {
         print(_ansi.error(result.stderr));
