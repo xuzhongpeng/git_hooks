@@ -20,6 +20,7 @@ enum Git {
   postRewrite,
   sendemailValidate
 }
+
 /// enum to git hooks types
 final Map<String, String> hookList = {
   'applypatchMsg': 'applypatch-msg',
