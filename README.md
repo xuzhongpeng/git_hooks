@@ -25,29 +25,6 @@ or
 flutter pub get
 ```
 
-## Uninstall
-
-```
-dev_dependencies:
-  - git_hooks: ^0.1.0
-```
-
-```
-pub get
-```
-
-or
-
-```
-flutter pub get
-```
-
-and
-
-```
-git_hooks uninstall
-```
-
 ## create files in .git/hooks
 Here has two ways
 
@@ -76,7 +53,19 @@ then `dart bin/main.dart` in shell.
 It will create some hooks files in `.git/hooks`. You can check whether the installation is correct by judging whether the file(".git/hooks/commit-msg" and other fils) exists.
 
 It will create a file `git_hooks.dart` in your project root directory.
+## Delete files in .git/hooks
 
+1. using git_hooks shell command
+```
+git_hooks uninstall
+```
+
+2. using dart codes
+```dart
+void main() async{
+  GitHooks.unInstall();
+}
+```
 ## Notion
 
 `Target File`: The file that the git hooks points to. It is `/git_hooks.dart` as default.
