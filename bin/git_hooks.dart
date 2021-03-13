@@ -11,7 +11,12 @@ void main(List<String> arguments) {
     if (arguments.isNotEmpty) {
       if (str == 'create') {
         //init files
-        var targetPath = arguments[1];
+        String? targetPath;
+        try {
+          targetPath = arguments[1];
+        } on RangeError {
+          targetPath = null;
+        }
         if (targetPath is String && targetPath.endsWith('.dart')) {
           CreateHooks.copyFile(targetPath: targetPath);
         } else {

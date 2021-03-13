@@ -13,13 +13,17 @@ class GitHooks {
   /// [targetPath] is the absolute path
   static void init({String? targetPath}) async {
     await Process.run('git_hooks', ['-v']).catchError((onError) async {
-      var result = await Process.run('pub', [
+      final args = [
         'global',
         'activate',
         '--source',
         'path',
-        Utils.getOwnPath()!
-      ]).catchError((onError) {
+      ];
+      final ownPath = Utils.getOwnPath();
+      if (ownPath is String) {
+        args.add(ownPath);
+      }
+      var result = await Process.run('pub', args).catchError((onError) {
         print(onError);
       });
       print(result.stdout);
