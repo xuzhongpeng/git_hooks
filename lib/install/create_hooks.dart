@@ -57,13 +57,15 @@ class CreateHooks {
   /// get target file path.
   /// returns the path that the git hooks points to.
   static Future<String> getTargetFilePath() async {
-    var commandPath = '';
+    late String commandPath;
     await _hooksCommand((hookFile) async {
       var hookTemplate = hookFile.readAsStringSync();
-      var match =
-          RegExp(r'dart\s(\S+)\s\$hookName').allMatches(hookTemplate).first;
-      commandPath = match.group(1) ?? '';
-      return false;
+      var match = RegExp(r'dart\s(\S+)\s\$hookName').firstMatch(hookTemplate);
+      if (match is RegExpMatch) {
+        commandPath = match.group(1)!;
+        return false;
+      }
+      return true;
     });
     return commandPath;
   }

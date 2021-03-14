@@ -8,6 +8,7 @@
 import 'dart:async';
 import 'dart:io' as io;
 
+// ignore_for_file: public_member_api_docs
 class Ansi {
   static bool get terminalSupportsAnsi {
     return io.stdout.supportsAnsiEscapes &&
@@ -109,8 +110,7 @@ class StandardLogger implements Logger {
   @override
   Ansi ansi;
 
-  StandardLogger({Ansi? ansi})
-      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi);
+  StandardLogger({Ansi? ansi}) : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi);
 
   @override
   bool get isVerbose => false;
@@ -173,7 +173,7 @@ class SimpleProgress extends Progress {
   void cancel() {}
 
   @override
-  void finish({String? message, bool showTiming = false}) {}
+  void finish({String? message, bool? showTiming}) {}
 }
 
 class AnsiProgress extends Progress {
@@ -211,12 +211,11 @@ class AnsiProgress extends Progress {
     }
   }
 
-  void _updateDisplay({
-    bool isFinal = false,
-    bool cancelled = false,
-    String? message,
-    bool showTiming = false,
-  }) {
+  void _updateDisplay(
+      {bool isFinal = false,
+      bool cancelled = false,
+      String? message,
+      bool showTiming = false}) {
     var char = kAnimationItems[_index % kAnimationItems.length];
     if (isFinal || cancelled) {
       char = '';
@@ -240,13 +239,12 @@ class VerboseLogger implements Logger {
   @override
   Ansi ansi;
   bool logTime;
-  final Stopwatch _timer;
+  late Stopwatch _timer;
 
-  VerboseLogger({
-    Ansi? ansi,
-    this.logTime = false,
-  })  : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi),
-        _timer = Stopwatch()..start();
+  VerboseLogger({Ansi? ansi, this.logTime = false})
+      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi) {
+    _timer = Stopwatch()..start();
+  }
 
   @override
   bool get isVerbose => true;

@@ -1,5 +1,7 @@
 ## 0.1.3-nullsafety.0
 - add null safety release
+## 0.1.4
+- pass analyzer
 ## 0.1.3
 - hooks command using relative path from project
 ## 0.1.2

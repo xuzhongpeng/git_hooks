@@ -16,7 +16,7 @@ class Utils {
     var pac = File(pacPath);
     var a = pac.readAsStringSync();
     var b = a.split('\n');
-    var resPath = '';
+    late String resPath;
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         var index = v.indexOf(':');
