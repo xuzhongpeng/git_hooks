@@ -8,16 +8,11 @@ import 'package:git_hooks/install/create_hooks.dart';
 void main(List<String> arguments) {
   if (arguments.isNotEmpty) {
     var str = arguments[0];
-    if (arguments.isNotEmpty) {
+    if (arguments != null && arguments.isNotEmpty) {
       if (str == 'create') {
         //init files
-        String? targetPath;
-        try {
-          targetPath = arguments[1];
-        } on RangeError {
-          targetPath = null;
-        }
-        if (targetPath is String && targetPath.endsWith('.dart')) {
+        var targetPath = arguments[1];
+        if (targetPath != null && targetPath.endsWith('.dart')) {
           CreateHooks.copyFile(targetPath: targetPath);
         } else {
           CreateHooks.copyFile();
@@ -25,7 +20,7 @@ void main(List<String> arguments) {
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        var f = File(Utils.uri(Utils.getOwnPath()! + '/pubspec.yaml'));
+        var f = File(Utils.uri(Utils.getOwnPath() + '/pubspec.yaml'));
         var text = f.readAsStringSync();
         Map yaml = loadYaml(text);
         String version = yaml['version'];

@@ -8,7 +8,6 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-// ignore_for_file: public_member_api_docs
 class Ansi {
   static bool get terminalSupportsAnsi {
     return io.stdout.supportsAnsiEscapes &&
@@ -59,12 +58,12 @@ class Ansi {
 /// standard status messages, trace level output, and indeterminate progress.
 abstract class Logger {
   /// Create a normal [Logger]; this logger will not display trace level output.
-  factory Logger.standard({Ansi? ansi}) => StandardLogger(ansi: ansi);
+  factory Logger.standard({Ansi ansi}) => StandardLogger(ansi: ansi);
 
   /// Create a [Logger] that will display trace level output.
   ///
   /// If [logTime] is `true`, this logger will display the time of the message.
-  factory Logger.verbose({Ansi? ansi, bool logTime = true}) {
+  factory Logger.verbose({Ansi ansi, bool logTime = true}) {
     return VerboseLogger(ansi: ansi, logTime: logTime);
   }
 
@@ -99,7 +98,7 @@ abstract class Progress {
   Duration get elapsed => _stopwatch.elapsed;
 
   /// Finish the indeterminate progress display.
-  void finish({String? message, bool showTiming = false});
+  void finish({String message, bool showTiming});
 
   /// Cancel the indeterminate progress display.
   void cancel();
@@ -110,19 +109,21 @@ class StandardLogger implements Logger {
   @override
   Ansi ansi;
 
-  StandardLogger({Ansi? ansi}) : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi);
+  StandardLogger({this.ansi}) {
+    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
+  }
 
   @override
   bool get isVerbose => false;
 
-  Progress? _currentProgress;
+  Progress _currentProgress;
 
   @override
   void stderr(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress;
       _currentProgress = null;
-      progress!.cancel();
+      progress.cancel();
     }
 
     io.stderr.writeln(message);
@@ -130,10 +131,10 @@ class StandardLogger implements Logger {
 
   @override
   void stdout(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress;
       _currentProgress = null;
-      progress!.cancel();
+      progress.cancel();
     }
 
     print(message);
@@ -144,10 +145,10 @@ class StandardLogger implements Logger {
 
   @override
   Progress progress(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress;
       _currentProgress = null;
-      progress!.cancel();
+      progress.cancel();
     }
 
     var progress = ansi.useAnsi
@@ -173,7 +174,7 @@ class SimpleProgress extends Progress {
   void cancel() {}
 
   @override
-  void finish({String? message, bool? showTiming}) {}
+  void finish({String message, bool showTiming}) {}
 }
 
 class AnsiProgress extends Progress {
@@ -182,7 +183,7 @@ class AnsiProgress extends Progress {
   final Ansi ansi;
 
   int _index = 0;
-  late Timer _timer;
+  Timer _timer;
 
   AnsiProgress(this.ansi, String message) : super(message) {
     io.stdout.write('${message}...  '.padRight(40));
@@ -204,7 +205,7 @@ class AnsiProgress extends Progress {
   }
 
   @override
-  void finish({String? message, bool showTiming = false}) {
+  void finish({String message, bool showTiming = false}) {
     if (_timer.isActive) {
       _timer.cancel();
       _updateDisplay(isFinal: true, message: message, showTiming: showTiming);
@@ -214,7 +215,7 @@ class AnsiProgress extends Progress {
   void _updateDisplay(
       {bool isFinal = false,
       bool cancelled = false,
-      String? message,
+      String message,
       bool showTiming = false}) {
     var char = kAnimationItems[_index % kAnimationItems.length];
     if (isFinal || cancelled) {
@@ -239,10 +240,12 @@ class VerboseLogger implements Logger {
   @override
   Ansi ansi;
   bool logTime;
-  late Stopwatch _timer;
+  Stopwatch _timer;
 
-  VerboseLogger({Ansi? ansi, this.logTime = false})
-      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi) {
+  VerboseLogger({this.ansi, this.logTime}) {
+    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
+    logTime ??= false;
+
     _timer = Stopwatch()..start();
   }
 
