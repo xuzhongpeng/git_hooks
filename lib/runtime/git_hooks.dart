@@ -11,15 +11,19 @@ class GitHooks {
 
   /// create files from dart codes.
   /// [targetPath] is the absolute path
-  static void init({String targetPath}) async {
+  static void init({String? targetPath}) async {
     await Process.run('git_hooks', ['-v']).catchError((onError) async {
-      var result = await Process.run('pub', [
+      final args = [
         'global',
         'activate',
         '--source',
         'path',
-        Utils.getOwnPath()
-      ]).catchError((onError) {
+      ];
+      final ownPath = Utils.getOwnPath();
+      if (ownPath is String) {
+        args.add(ownPath);
+      }
+      var result = await Process.run('pub', args).catchError((onError) {
         print(onError);
       });
       print(result.stdout);
@@ -34,13 +38,13 @@ class GitHooks {
   }
 
   /// unInstall git_hooks
-  static void unInstall({String path}) async {
+  static void unInstall({String? path}) async {
     await deleteFiles();
   }
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath({String path}) async {
+  static Future<String> getTargetFilePath({String? path}) async {
     return CreateHooks.getTargetFilePath();
   }
 
@@ -55,9 +59,9 @@ class GitHooks {
   static void call(List<String> argument, Map<Git, UserBackFun> params) async {
     var type = argument[0];
     try {
-      params.keys.forEach((userType) async {
+      params.forEach((userType, function) async {
         if (hookList[userType.toString().split('.')[1]] == type) {
-          if (!await params[userType]()) {
+          if (!await function()) {
             exit(1);
           }
         }
