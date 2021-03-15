@@ -1,3 +1,6 @@
+## 0.1.5
+
+- fixed errors when execute `git_hooks create`
 ## 0.1.4
 - pass analyzer
 ## 0.1.3

@@ -13,7 +13,7 @@ class CreateHooks {
   /// Create files to `.git/hooks` and [targetPath]
   static Future<bool> copyFile({String targetPath}) async {
     if (targetPath == null) {
-      targetPath = '/git_hooks.dart';
+      targetPath = 'git_hooks.dart';
     } else {
       if (!targetPath.endsWith('.dart')) {
         print('the file what you want to create is not a dart file');
