@@ -10,7 +10,7 @@ Future<bool> deleteFiles() async {
   var logger = Logger.standard();
 
   var gitDir = Directory(Utils.uri(rootDir.path + '/.git/'));
-  var gitHookDir = Utils.uri(rootDir.path + '/.git/hooks/');
+  var gitHookDir = Utils.gitHookFolder;
   if (!gitDir.existsSync()) {
     print(gitDir.path);
     throw ArgumentError('.git is not exists in your project');

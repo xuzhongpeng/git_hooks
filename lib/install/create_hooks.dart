@@ -4,12 +4,12 @@ import 'package:git_hooks/utils/utils.dart';
 import '../git_hooks.dart';
 import './hook_template.dart';
 import 'package:path/path.dart';
-
 typedef _HooksCommandFile = Future<bool> Function(File file);
 String _rootDir = Directory.current.path;
 
 /// install hooks
 class CreateHooks {
+  
   /// Create files to `.git/hooks` and [targetPath]
   static Future<bool> copyFile({String targetPath}) async {
     if (targetPath == null) {
@@ -70,7 +70,7 @@ class CreateHooks {
 
   static Future<void> _hooksCommand(_HooksCommandFile callBack) async {
     var gitDir = Directory(Utils.uri(_rootDir + '/.git/'));
-    var gitHookDir = Utils.uri(_rootDir + '/.git/hooks/');
+    var gitHookDir = Utils.gitHookFolder;
     if (!gitDir.existsSync()) {
       throw ArgumentError('.git is not exists in your project');
     }
