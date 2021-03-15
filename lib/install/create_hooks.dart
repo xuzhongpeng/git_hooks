@@ -4,12 +4,12 @@ import 'package:git_hooks/utils/utils.dart';
 import '../git_hooks.dart';
 import './hook_template.dart';
 import 'package:path/path.dart';
+
 typedef _HooksCommandFile = Future<bool> Function(File file);
 String _rootDir = Directory.current.path;
 
 /// install hooks
 class CreateHooks {
-  
   /// Create files to `.git/hooks` and [targetPath]
   static Future<bool> copyFile({String targetPath}) async {
     if (targetPath == null) {
