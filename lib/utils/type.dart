@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs
+
 /// all git hooks from [git hooks documentation](https://git-scm.com/docs/githooks.html)
+
 enum Git {
   applypatchMsg,
   preApplypatch,
