@@ -5,6 +5,9 @@
 [![Star](https://img.shields.io/github/stars/xuzhongpeng/git_hooks)](https://github.com/xuzhongpeng/git_hooks)
 [![travis](https://api.travis-ci.com/xuzhongpeng/git_hooks.svg?branch=master&status=created)](https://travis-ci.com/github/xuzhongpeng/git_hooks/builds/)
 
+* [简体中文](./README_CN.md)
+
+
 git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter! It is similar to husky.
 
 ## Install
