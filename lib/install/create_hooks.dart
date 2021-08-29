@@ -11,7 +11,7 @@ String _rootDir = Directory.current.path;
 /// install hooks
 class CreateHooks {
   /// Create files to `.git/hooks` and [targetPath]
-  static Future<bool> copyFile({String targetPath}) async {
+  static Future<bool> copyFile({String? targetPath}) async {
     if (targetPath == null) {
       targetPath = 'git_hooks.dart';
     } else {
@@ -56,8 +56,8 @@ class CreateHooks {
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath() async {
-    var commandPath = '';
+  static Future<String?> getTargetFilePath() async {
+    String? commandPath = '';
     await _hooksCommand((hookFile) async {
       var hookTemplate = hookFile.readAsStringSync();
       var match =

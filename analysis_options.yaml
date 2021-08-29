@@ -4,8 +4,7 @@ analyzer:
   exclude: 
     - example/**
     - build/**
-    - lib/utils/logging.dart
-    - lib/utils/type.dart
+
   errors:
     unused_import: warning
     unused_local_variable: warning
