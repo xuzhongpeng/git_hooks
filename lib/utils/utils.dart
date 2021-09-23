@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:meta/meta.dart';
+
 /// return bool function
 typedef UserBackFun = Future<bool> Function();
+String _rootDir = Directory.current.path;
 
 /// utils class
 class Utils {
@@ -16,7 +19,7 @@ class Utils {
     var pac = File(pacPath);
     var a = pac.readAsStringSync();
     var b = a.split('\n');
-    late String resPath;
+    String? resPath;
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         var index = v.indexOf(':');
@@ -24,17 +27,14 @@ class Utils {
         resPath = v.substring(index + 1, lastIndex);
       }
     });
-    if (resPath.isNotEmpty) {
-      resPath = path.fromUri(resPath);
-      if (path.isRelative(resPath)) {
-        resPath = path.canonicalize(resPath);
-      }
-      if (!Directory(resPath).existsSync()) {
-        return null;
-      }
-      return resPath;
+    resPath = path.fromUri(resPath);
+    if (path.isRelative(resPath!)) {
+      resPath = path.canonicalize(resPath!);
     }
-    return null;
+    if (!Directory(resPath!).existsSync()) {
+      return null;
+    }
+    return resPath;
   }
 
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
@@ -43,5 +43,16 @@ class Utils {
     var myFile = File(Utils.uri('${rootDir.path}/.git/COMMIT_EDITMSG'));
     var commitMsg = myFile.readAsStringSync();
     return commitMsg;
+  }
+
+  static String _gitHookFolder = _rootDir + '/.git/hooks/';
+
+  /// get git hooks folder
+  static String get gitHookFolder => uri(_gitHookFolder);
+
+  /// test create git hooks file
+  @visibleForTesting
+  static void setGitHooksFolder(String path) {
+    _gitHookFolder = '$path/';
   }
 }

@@ -5,8 +5,8 @@ import 'package:yaml/yaml.dart';
 
 import 'package:git_hooks/install/create_hooks.dart';
 
-void main(List<String> arguments) {
-  if (arguments.isNotEmpty) {
+void main(List<String>? arguments) {
+  if (arguments != null && arguments.isNotEmpty) {
     var str = arguments[0];
     if (arguments.isNotEmpty) {
       if (str == 'create') {
@@ -25,10 +25,10 @@ void main(List<String> arguments) {
       } else if (str == '-h' || str == '-help') {
         help();
       } else if (str == '-v' || str == '--version') {
-        var f = File(Utils.uri(Utils.getOwnPath()! + '/pubspec.yaml'));
+        var f = File(Utils.uri((Utils.getOwnPath() ?? '') + '/pubspec.yaml'));
         var text = f.readAsStringSync();
         Map yaml = loadYaml(text);
-        String version = yaml['version'];
+        String? version = yaml['version'];
         print(version);
       } else if (str == 'uninstall') {
         GitHooks.unInstall();

@@ -13,7 +13,7 @@ class CreateHooks {
   /// Create files to `.git/hooks` and [targetPath]
   static Future<bool> copyFile({String? targetPath}) async {
     if (targetPath == null) {
-      targetPath = '/git_hooks.dart';
+      targetPath = 'git_hooks.dart';
     } else {
       if (!targetPath.endsWith('.dart')) {
         print('the file what you want to create is not a dart file');
@@ -56,8 +56,8 @@ class CreateHooks {
 
   /// get target file path.
   /// returns the path that the git hooks points to.
-  static Future<String> getTargetFilePath() async {
-    late String commandPath;
+  static Future<String?> getTargetFilePath() async {
+    String? commandPath = '';
     await _hooksCommand((hookFile) async {
       var hookTemplate = hookFile.readAsStringSync();
       var match = RegExp(r'dart\s(\S+)\s\$hookName').firstMatch(hookTemplate);
@@ -72,7 +72,7 @@ class CreateHooks {
 
   static Future<void> _hooksCommand(_HooksCommandFile callBack) async {
     var gitDir = Directory(Utils.uri(_rootDir + '/.git/'));
-    var gitHookDir = Utils.uri(_rootDir + '/.git/hooks/');
+    var gitHookDir = Utils.gitHookFolder;
     if (!gitDir.existsSync()) {
       throw ArgumentError('.git is not exists in your project');
     }

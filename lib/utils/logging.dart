@@ -1,9 +1,4 @@
-// Copyright (c) 2019, the Dart project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
-/// This library contains functionality to help command-line utilities to easily
-/// create aesthetic output.
+// ignore_for_file: public_member_api_docs
 
 import 'dart:async';
 import 'dart:io' as io;
@@ -108,7 +103,7 @@ abstract class Progress {
 ///
 class StandardLogger implements Logger {
   @override
-  Ansi ansi;
+  final Ansi ansi;
 
   StandardLogger({Ansi? ansi}) : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi);
 
@@ -119,7 +114,7 @@ class StandardLogger implements Logger {
 
   @override
   void stderr(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress!;
       _currentProgress = null;
       progress.cancel();
@@ -130,7 +125,7 @@ class StandardLogger implements Logger {
 
   @override
   void stdout(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress!;
       _currentProgress = null;
       progress.cancel();
@@ -144,7 +139,7 @@ class StandardLogger implements Logger {
 
   @override
   Progress progress(String message) {
-    if (_currentProgress is Progress) {
+    if (_currentProgress != null) {
       var progress = _currentProgress!;
       _currentProgress = null;
       progress.cancel();
@@ -207,7 +202,11 @@ class AnsiProgress extends Progress {
   void finish({String? message, bool showTiming = false}) {
     if (_timer.isActive) {
       _timer.cancel();
-      _updateDisplay(isFinal: true, message: message, showTiming: showTiming);
+      _updateDisplay(
+        isFinal: true,
+        message: message,
+        showTiming: showTiming,
+      );
     }
   }
 
@@ -237,12 +236,13 @@ class AnsiProgress extends Progress {
 
 class VerboseLogger implements Logger {
   @override
-  Ansi ansi;
-  bool logTime;
+  final Ansi ansi;
+  final bool logTime;
   late Stopwatch _timer;
 
-  VerboseLogger({Ansi? ansi, this.logTime = false})
-      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi) {
+  VerboseLogger({Ansi? ansi, bool? logTime})
+      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi),
+        logTime = logTime ?? false {
     _timer = Stopwatch()..start();
   }
 
