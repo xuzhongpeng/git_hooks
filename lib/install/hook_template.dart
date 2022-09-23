@@ -1,13 +1,10 @@
-import 'package:yaml/yaml.dart';
 import 'dart:io';
+
+import 'package:yaml/yaml.dart';
 
 /// hooks template
 String commonHook(String path) {
-  var temp = '';
-  if (Platform.isMacOS) {
-    temp += 'source ~/.bash_profile\n';
-  }
-  temp += '''
+  return '''
 hookName=`basename "\$0"`
 gitParams="\$*"
 program_exists() {
@@ -19,7 +16,7 @@ program_exists() {
     return 0
 }
 if program_exists dart; then
-  dart ${path} \$hookName
+  dart $path \$hookName
   if [ "\$?" -ne "0" ];then
     exit 1
   fi
@@ -28,15 +25,14 @@ else
   echo "Cannot find dart in PATH"
 fi
 ''';
-  return temp;
 }
 
 /// dart code template
-const userHooks = r'''
+const userHooks = '''
 import 'package:git_hooks/git_hooks.dart';
 // import 'dart:io';
 
-void main(List arguments) {
+void main(List<String> arguments) {
   // ignore: omit_local_variable_types
   Map<Git, UserBackFun> params = {
     Git.commitMsg: commitMsg,
@@ -70,25 +66,25 @@ Future<bool> preCommit() async {
 
 /// hooks header
 String createHeader() {
-  var rootDir = Directory.current;
-  var f = File(rootDir.path + '/pubspec.yaml');
-  var text = f.readAsStringSync();
-  Map yaml = loadYaml(text);
-  String name = yaml['name'] ?? '';
-  String author = yaml['author'] ?? '';
-  String version = yaml['version'] ?? '';
-  String homepage = yaml['homepage'] ?? '';
+  final rootDir = Directory.current;
+  final f = File('${rootDir.path}/pubspec.yaml');
+  final text = f.readAsStringSync();
+  final yaml = loadYaml(text) as Map<String, String>;
+  final name = yaml['name'] ?? '';
+  final author = yaml['author'] ?? '';
+  final version = yaml['version'] ?? '';
+  final homepage = yaml['homepage'] ?? '';
   return '''
 #!/bin/sh
 # !!!don"t edit this file
-# ${name}
-# Hook created by ${author}
-#   Version: ${version}
+# $name
+# Hook created by $author
+#   Version: $version
 #   At: ${DateTime.now()}
-#   See: ${homepage}#readme
+#   See: $homepage#readme
 
 # From
-#   Homepage: ${homepage}#readme
+#   Homepage: $homepage#readme
 
 ''';
 }
