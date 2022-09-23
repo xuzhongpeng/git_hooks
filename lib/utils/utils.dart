@@ -38,6 +38,14 @@ class Utils {
     return resPath;
   }
 
+  /// Returns the current branch name
+  static String getBranchName() {
+    //ref: refs/heads/chore-pre-commit
+    final headFile = File(Utils.uri('${Directory.current.path}/.git/HEAD'));
+    final headString = headFile.readAsStringSync();
+    return headString.replaceFirst('ref: refs/heads/', '');
+  }
+
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
   static String getCommitEditMsg() {
     final rootDir = Directory.current;
