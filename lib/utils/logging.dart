@@ -4,14 +4,13 @@ import 'dart:async';
 import 'dart:io' as io;
 
 class Ansi {
+  Ansi(this.useAnsi);
   static bool get terminalSupportsAnsi {
     return io.stdout.supportsAnsiEscapes &&
         io.stdioType(io.stdout) == io.StdioType.terminal;
   }
 
   final bool useAnsi;
-
-  Ansi(this.useAnsi);
 
   String get cyan => _code('\u001b[36m');
 
@@ -53,12 +52,12 @@ class Ansi {
 /// standard status messages, trace level output, and indeterminate progress.
 abstract class Logger {
   /// Create a normal [Logger]; this logger will not display trace level output.
-  factory Logger.standard({Ansi ansi}) => StandardLogger(ansi: ansi);
+  factory Logger.standard({Ansi? ansi}) => StandardLogger(ansi: ansi);
 
   /// Create a [Logger] that will display trace level output.
   ///
   /// If [logTime] is `true`, this logger will display the time of the message.
-  factory Logger.verbose({Ansi ansi, bool logTime = true}) {
+  factory Logger.verbose({required Ansi ansi, bool logTime = true}) {
     return VerboseLogger(ansi: ansi, logTime: logTime);
   }
 
@@ -85,15 +84,14 @@ abstract class Logger {
 
 /// A handle to an indeterminate progress display.
 abstract class Progress {
+  Progress(this.message) : _stopwatch = Stopwatch()..start();
   final String message;
   final Stopwatch _stopwatch;
-
-  Progress(this.message) : _stopwatch = Stopwatch()..start();
 
   Duration get elapsed => _stopwatch.elapsed;
 
   /// Finish the indeterminate progress display.
-  void finish({String message, bool showTiming});
+  void finish({String? message, bool showTiming = false});
 
   /// Cancel the indeterminate progress display.
   void cancel();
@@ -101,36 +99,29 @@ abstract class Progress {
 
 ///
 class StandardLogger implements Logger {
+  StandardLogger({Ansi? ansi}) : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi);
   @override
   Ansi ansi;
-
-  StandardLogger({this.ansi}) {
-    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
-  }
 
   @override
   bool get isVerbose => false;
 
-  Progress _currentProgress;
+  Progress? _currentProgress;
 
   @override
   void stderr(String message) {
-    if (_currentProgress != null) {
-      var progress = _currentProgress;
-      _currentProgress = null;
-      progress.cancel();
-    }
+    final progress = _currentProgress;
+    _currentProgress = null;
+    progress?.cancel();
 
     io.stderr.writeln(message);
   }
 
   @override
   void stdout(String message) {
-    if (_currentProgress != null) {
-      var progress = _currentProgress;
-      _currentProgress = null;
-      progress.cancel();
-    }
+    final progress = _currentProgress;
+    _currentProgress = null;
+    progress?.cancel();
 
     print(message);
   }
@@ -140,17 +131,15 @@ class StandardLogger implements Logger {
 
   @override
   Progress progress(String message) {
-    if (_currentProgress != null) {
-      var progress = _currentProgress;
-      _currentProgress = null;
-      progress.cancel();
-    }
+    final progress = _currentProgress;
+    _currentProgress = null;
+    progress?.cancel();
 
-    var progress = ansi.useAnsi
+    final progress2 = ansi.useAnsi
         ? AnsiProgress(ansi, message)
         : SimpleProgress(this, message);
-    _currentProgress = progress;
-    return progress;
+    _currentProgress = progress2;
+    return progress2;
   }
 
   @override
@@ -159,37 +148,35 @@ class StandardLogger implements Logger {
 }
 
 class SimpleProgress extends Progress {
-  final Logger logger;
-
   SimpleProgress(this.logger, String message) : super(message) {
     logger.stdout('$message...');
   }
+  final Logger logger;
 
   @override
   void cancel() {}
 
   @override
-  void finish({String message, bool showTiming}) {}
+  void finish({String? message, bool? showTiming}) {}
 }
 
 class AnsiProgress extends Progress {
-  static const List<String> kAnimationItems = ['/', '-', '\\', '|'];
-
-  final Ansi ansi;
-
-  int _index = 0;
-  Timer _timer;
-
   AnsiProgress(this.ansi, String message) : super(message) {
-    io.stdout.write('${message}...  '.padRight(40));
+    io.stdout.write('$message...  '.padRight(40));
 
-    _timer = Timer.periodic(Duration(milliseconds: 80), (t) {
+    _timer = Timer.periodic(const Duration(milliseconds: 80), (t) {
       _index++;
       _updateDisplay();
     });
 
     _updateDisplay();
   }
+  static const List<String> kAnimationItems = ['/', '-', r'\', '|'];
+
+  final Ansi ansi;
+
+  int _index = 0;
+  late final Timer _timer;
 
   @override
   void cancel() {
@@ -200,28 +187,29 @@ class AnsiProgress extends Progress {
   }
 
   @override
-  void finish({String message, bool showTiming = false}) {
+  void finish({String? message, bool showTiming = false}) {
     if (_timer.isActive) {
       _timer.cancel();
       _updateDisplay(isFinal: true, message: message, showTiming: showTiming);
     }
   }
 
-  void _updateDisplay(
-      {bool isFinal = false,
-      bool cancelled = false,
-      String message,
-      bool showTiming = false}) {
+  void _updateDisplay({
+    bool isFinal = false,
+    bool cancelled = false,
+    String? message,
+    bool showTiming = false,
+  }) {
     var char = kAnimationItems[_index % kAnimationItems.length];
     if (isFinal || cancelled) {
       char = '';
     }
-    io.stdout.write('${ansi.backspace}${char}');
+    io.stdout.write('${ansi.backspace}$char');
     if (isFinal || cancelled) {
       if (message != null) {
         io.stdout.write(message.isEmpty ? ' ' : message);
       } else if (showTiming) {
-        var time = (elapsed.inMilliseconds / 1000.0).toStringAsFixed(1);
+        final time = (elapsed.inMilliseconds / 1000.0).toStringAsFixed(1);
         io.stdout.write('${time}s');
       } else {
         io.stdout.write(' ');
@@ -232,17 +220,14 @@ class AnsiProgress extends Progress {
 }
 
 class VerboseLogger implements Logger {
+  VerboseLogger({Ansi? ansi, this.logTime = false})
+      : ansi = ansi ?? Ansi(Ansi.terminalSupportsAnsi) {
+    _timer = Stopwatch()..start();
+  }
   @override
   Ansi ansi;
   bool logTime;
-  Stopwatch _timer;
-
-  VerboseLogger({this.ansi, this.logTime}) {
-    ansi ??= Ansi(Ansi.terminalSupportsAnsi);
-    logTime ??= false;
-
-    _timer = Stopwatch()..start();
-  }
+  late final Stopwatch _timer;
 
   @override
   bool get isVerbose => true;
@@ -275,17 +260,19 @@ class VerboseLogger implements Logger {
     }
 
     var seconds = _timer.elapsedMilliseconds / 1000.0;
-    var minutes = seconds ~/ 60;
+    final minutes = seconds ~/ 60;
     seconds -= minutes * 60.0;
 
-    var buf = StringBuffer();
+    final buf = StringBuffer();
     if (minutes > 0) {
-      buf.write((minutes % 60));
-      buf.write('m ');
+      buf
+        ..write(minutes % 60)
+        ..write('m ');
     }
 
-    buf.write(seconds.toStringAsFixed(3).padLeft(minutes > 0 ? 6 : 1, '0'));
-    buf.write('s');
+    buf
+      ..write(seconds.toStringAsFixed(3).padLeft(minutes > 0 ? 6 : 1, '0'))
+      ..write('s');
 
     return '[${buf.toString().padLeft(11)}] ';
   }
