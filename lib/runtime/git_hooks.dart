@@ -22,7 +22,7 @@ class GitHooks {
         '--source',
         'path',
         if (ownPath != null) ownPath,
-      ]).catchError(print);
+      ]);
       print(result.stdout);
       if (result.stderr.length != 0) {
         print(_ansi.error(result.stderr.toString()));
