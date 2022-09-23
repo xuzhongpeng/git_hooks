@@ -30,7 +30,7 @@ class CreateHooks {
         }
         await hookFile.writeAsString(commonStr);
         if (!Platform.isWindows) {
-          await Process.run('chmod', ['777', hookFile.path]).catchError(print);
+          await Process.run('chmod', ['777', hookFile.path]);
         }
         return true;
       });
