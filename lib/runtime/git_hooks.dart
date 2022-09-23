@@ -13,7 +13,8 @@ class GitHooks {
   /// create files from dart codes.
   /// [targetPath] is the absolute path
   static Future<void> init({required String targetPath}) async {
-    await Process.run('git_hooks', ['-v']).catchError((_) async {
+    await Process.run('git_hooks', ['-v']).catchError((error) async {
+      print('error: $error');
       final ownPath = Utils.getOwnPath();
 
       final result = await Process.run('pub', [

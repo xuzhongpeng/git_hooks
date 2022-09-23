@@ -25,8 +25,8 @@ void main(List<String> arguments) {
       } else if (str == '-v' || str == '--version') {
         final f = File(Utils.uri('${Utils.getOwnPath()}/pubspec.yaml'));
         final text = f.readAsStringSync();
-        final yaml = loadYaml(text) as Map<String, String>;
-        final version = yaml['version']!;
+        final yaml = loadYaml(text) as YamlMap;
+        final version = yaml['version'];
         print(version);
       } else if (str == 'uninstall') {
         GitHooks.unInstall();

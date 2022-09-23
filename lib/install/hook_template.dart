@@ -69,7 +69,7 @@ String createHeader() {
   final rootDir = Directory.current;
   final f = File('${rootDir.path}/pubspec.yaml');
   final text = f.readAsStringSync();
-  final yaml = loadYaml(text) as Map<String, String>;
+  final yaml = loadYaml(text) as YamlMap;
   final name = yaml['name'] ?? '';
   final author = yaml['author'] ?? '';
   final version = yaml['version'] ?? '';
