@@ -37,7 +37,7 @@ Here has two ways
 activate `git_hooks` in shell
 
 ```
-pub global activate git_hooks
+dart pub global activate -sgit git@github.com:nank1ro/git_hooks.git
 ```
 Now,we can let the `git hooks` bring into effect
 ```
