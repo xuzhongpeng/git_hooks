@@ -43,7 +43,7 @@ class Utils {
     //ref: refs/heads/chore-pre-commit
     final headFile = File(Utils.uri('${Directory.current.path}/.git/HEAD'));
     final headString = headFile.readAsStringSync();
-    return headString.replaceFirst('ref: refs/heads/', '');
+    return headString.replaceFirst('ref: refs/heads/', '').trim();
   }
 
   /// get commit edit msg from '.git/COMMIT_EDITMSG'
