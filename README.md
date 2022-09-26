@@ -1,12 +1,8 @@
 # git_hooks
 
-![https://img.shields.io/github/license/xuzhongpeng/git_hooks](https://img.shields.io/github/license/xuzhongpeng/git_hooks)
-[![Pub](https://img.shields.io/pub/v/git_hooks)](https://pub.dev/packages/git_hooks)
-[![Star](https://img.shields.io/github/stars/xuzhongpeng/git_hooks)](https://github.com/xuzhongpeng/git_hooks)
-[![travis](https://api.travis-ci.com/xuzhongpeng/git_hooks.svg?branch=master&status=created)](https://travis-ci.com/github/xuzhongpeng/git_hooks/builds/)
+![https://img.shields.io/github/license/qurami/git_hooks](https://img.shields.io/github/license/qurami/git_hooks)
 
-* [简体中文](./README_CN.md)
-
+* Fork from https://github.com/xuzhongpeng/git_hooks to add support to null safety and many other features that we use internally. We'll keep on maintaining this repo for internal usage.
 
 git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flutter! It is similar to husky.
 
@@ -37,7 +33,7 @@ Here has two ways
 activate `git_hooks` in shell
 
 ```
-dart pub global activate -sgit git@github.com:nank1ro/git_hooks.git
+dart pub global activate -sgit git@github.com:qurami/git_hooks.git
 ```
 Now,we can let the `git hooks` bring into effect
 ```
