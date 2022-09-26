@@ -1,6 +1,6 @@
 name: git_hooks
 description: Using dart to prevents bad commit or push (git hooks, pre-commit/precommit, pre-push/prepush, post-merge/postmerge and all that stuff...).It is similar to husky.
-version: 0.1.8
+version: 1.0.0
 homepage: https://github.com/xuzhongpeng/git_hooks
 
 environment:
