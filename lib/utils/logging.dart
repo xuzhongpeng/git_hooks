@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-// ignore_for_file: public_member_api_docs
 class Ansi {
   static bool get terminalSupportsAnsi {
     return io.stdout.supportsAnsiEscapes &&

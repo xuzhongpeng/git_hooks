@@ -14,7 +14,7 @@ git_hooks can prevent bad `git commit`,`git push` and more easy in dart and flut
 
 ```
 dev_dependencies:
-  git_hooks: ^0.1.0
+  git_hooks: ^1.0.0
 ```
 
 then

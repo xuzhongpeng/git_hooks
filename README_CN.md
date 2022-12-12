@@ -50,7 +50,7 @@ git commit -m '提交信息'
 在项目中的`pubspec.yaml`文件中添加
 ```yaml
 dev_dependencies:
-  git_hooks: ^0.1.5
+  git_hooks: ^1.0.0
 ```
 
 创建`hooks文件`和`dart钩子文件`的命令是：

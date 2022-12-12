@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:git_hooks/utils/logging.dart';
-import 'package:git_hooks/utils/utils.dart';
 
 import '../git_hooks.dart';
 
@@ -31,6 +30,7 @@ Future<bool> deleteFiles() async {
   progress.finish(showTiming: true);
   print('All files deleted successfully!');
   await Process.run('pub', ['global', 'deactivate', 'git_hooks'])
+      // ignore: body_might_complete_normally_catch_error
       .catchError((onError) {
     print(onError);
   });

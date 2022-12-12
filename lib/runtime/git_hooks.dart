@@ -21,6 +21,7 @@ class GitHooks {
         '--source',
         'path',
         Utils.getOwnPath() ?? '',
+      // ignore: body_might_complete_normally_catch_error
       ]).catchError((onError) {
         print(onError);
       });

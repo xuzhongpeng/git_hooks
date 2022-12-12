@@ -5,9 +5,9 @@ import 'package:yaml/yaml.dart';
 
 import 'package:git_hooks/install/create_hooks.dart';
 
-void main(List<String>? arguments) {
+void main(List<dynamic>? arguments) {
   if (arguments != null && arguments.isNotEmpty) {
-    var str = arguments[0];
+    var str = arguments[0]!.toString();
     if (arguments.isNotEmpty) {
       if (str == 'create') {
         //init files

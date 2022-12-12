@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:git_hooks/utils/logging.dart';
-import 'package:git_hooks/utils/utils.dart';
-import '../git_hooks.dart';
+import 'package:git_hooks/git_hooks.dart';
 import './hook_template.dart';
 import 'package:path/path.dart';
 
@@ -33,10 +32,11 @@ class CreateHooks {
         }
         await hookFile.writeAsString(commonStr);
         if (!Platform.isWindows) {
-          await Process.run('chmod', ['777', hookFile.path])
-              .catchError((onError) {
-            print(onError);
-          });
+          try {
+            await Process.run('chmod', ['777', hookFile.path]);
+          } catch (e) {
+            print(e);
+          }
         }
         return true;
       });

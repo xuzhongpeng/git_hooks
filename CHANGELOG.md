@@ -1,3 +1,5 @@
+## 1.0.0
+- support null safety
 ## 0.1.3-nullsafety.0
 - add null safety release
 ## 0.1.4
