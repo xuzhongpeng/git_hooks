@@ -1,8 +1,5 @@
-## 0.1.6
-upgrade path to 1.8.0,yaml to 3.1.0,meta to 1.3.0
-## 0.1.5
-
-- fixed errors when execute `git_hooks create`
+## 0.1.3-nullsafety.0
+- add null safety release
 ## 0.1.4
 - pass analyzer
 ## 0.1.3

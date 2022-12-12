@@ -1,5 +1,5 @@
-import 'package:path/path.dart' as path;
 import 'dart:io';
+import 'package:path/path.dart' as path;
 import 'package:meta/meta.dart';
 
 /// return bool function
@@ -14,12 +14,12 @@ class Utils {
   }
 
   /// get path of git_hooks library
-  static String getOwnPath() {
+  static String? getOwnPath() {
     var pacPath = path.fromUri(path.current + '/.packages');
     var pac = File(pacPath);
     var a = pac.readAsStringSync();
     var b = a.split('\n');
-    String resPath;
+    String? resPath;
     b.forEach((v) {
       if (v.startsWith('git_hooks:')) {
         var index = v.indexOf(':');
@@ -28,10 +28,10 @@ class Utils {
       }
     });
     resPath = path.fromUri(resPath);
-    if (path.isRelative(resPath)) {
-      resPath = path.canonicalize(resPath);
+    if (path.isRelative(resPath!)) {
+      resPath = path.canonicalize(resPath!);
     }
-    if (!Directory(resPath).existsSync()) {
+    if (!Directory(resPath!).existsSync()) {
       return null;
     }
     return resPath;
