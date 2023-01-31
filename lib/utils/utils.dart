@@ -87,7 +87,7 @@ class Utils {
   }
 
   /// Check if the branch name is supported for the beginning of the name
-  bool isBranchNameValid(
+  void isBranchNameValid(
     String branchName, {
     // additional branch names that you want to support, optional
     List<String>? additionalBranchNames,
@@ -106,6 +106,11 @@ class Utils {
     ];
     // Matches all the words that preceed a `-` or `/` character.
     final re = RegExp("r'^${supportedBranchNames.join('|')}[-/]");
-    return re.hasMatch(branchName);
+    final isBranchValid = re.hasMatch(branchName);
+    if (!isBranchValid) {
+      throw Exception(
+        'the branch name `$branchName` starts with an invalid value, supported values are: $supportedBranchNames',
+      );
+    }
   }
 }
