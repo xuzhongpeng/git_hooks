@@ -71,12 +71,10 @@ class Utils {
   }) async {
     final result = await Process.run(
       'git',
-      ['diff', '--cached', '--name-only', '--diff-filter=ACM'],
+      ['diff', '--name-only'],
     );
 
     final fileNames = (result.stdout as String)
-        // remove the last empty line
-        .trimRight()
         // split file names by line
         .split('\n')
         // consider only folders starting with `directories`
@@ -89,9 +87,11 @@ class Utils {
   /// Formats the flutter code
   static Future<void> formatFlutterCode() async {
     final modifiedFilePaths = await Utils.getModifiedFilePaths();
+    print("modifiedFilePaths: $modifiedFilePaths");
+    // Do not format if there aren't modified files to format.
+    if (modifiedFilePaths.isEmpty) return;
     final result =
         await Process.run('flutter', ['format', ...modifiedFilePaths]);
-    // ignore: avoid_print
     print(result.stdout);
     if (result.exitCode != 0) {
       throw Exception('flutter format exitCode: ${result.exitCode}');
