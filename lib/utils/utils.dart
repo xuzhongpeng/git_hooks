@@ -64,4 +64,48 @@ class Utils {
   static void setGitHooksFolder(String path) {
     _gitHookFolder = '$path/';
   }
+
+  /// Returns the list of modified file names
+  Future<List<String>> getModifiedFileNames({
+    List<String> directories = const ['lib', 'test'],
+  }) async {
+    final result = await Process.run(
+      'git',
+      ['diff', '--cached', '--name-only', '--diff-filter=ACM'],
+    );
+
+    final fileNames = (result.stdout as String)
+        // remove the last empty line
+        .trimRight()
+        // split file names by line
+        .split('\n')
+        // consider only folders starting with `directories`
+        .where(
+          (fileName) => fileName.startsWith(RegExp(directories.join('|'))),
+        );
+    return fileNames.toList();
+  }
+
+  /// Check if the branch name is supported for the beginning of the name
+  bool isBranchNameValid(
+    String branchName, {
+    // additional branch names that you want to support, optional
+    List<String>? additionalBranchNames,
+  }) {
+    final supportedBranchNames = [
+      'main',
+      'master',
+      'chore',
+      'bugfix',
+      'feat',
+      'release',
+      'hotfix',
+      // Doesn't trigger CI
+      'unmanaged',
+      ...?additionalBranchNames,
+    ];
+    // Matches all the words that preceed a `-` or `/` character.
+    final re = RegExp("r'^${supportedBranchNames.join('|')}[-/]");
+    return re.hasMatch(branchName);
+  }
 }
