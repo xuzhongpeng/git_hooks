@@ -66,7 +66,7 @@ class Utils {
   }
 
   /// Returns the list of modified file names
-  static Future<List<String>> getModifiedFileNames({
+  static Future<List<String>> getModifiedFilePaths({
     List<String> directories = const ['lib', 'test'],
   }) async {
     final result = await Process.run(
@@ -86,8 +86,21 @@ class Utils {
     return fileNames.toList();
   }
 
+  /// Formats the flutter code
+  static Future<void> formatFlutterCode() async {
+    final modifiedFilePaths = await Utils.getModifiedFilePaths();
+    final result =
+        await Process.run('flutter', ['format', ...modifiedFilePaths]);
+    // ignore: avoid_print
+    print(result.stdout);
+    if (result.exitCode != 0) {
+      throw Exception('flutter format exitCode: ${result.exitCode}');
+    }
+  }
+
   /// Check if the branch name is supported for the beginning of the name
-  static void isBranchNameValid(
+  /// Throws if the [branchName] is not supported.
+  static void checkBranchName(
     String branchName, {
     // additional branch names that you want to support, optional
     List<String>? additionalBranchNames,
@@ -109,7 +122,8 @@ class Utils {
     final isBranchValid = re.hasMatch(branchName);
     if (!isBranchValid) {
       throw Exception(
-        'the branch name `$branchName` starts with an invalid value, supported values are: $supportedBranchNames',
+        'the branch name `$branchName` starts with an invalid value, supported '
+        'values are: $supportedBranchNames',
       );
     }
   }
