@@ -104,8 +104,7 @@ class Utils {
     final modifiedFilePaths = await Utils.getModifiedFilePaths();
     // Do not format if there aren't modified files to format.
     if (modifiedFilePaths.isEmpty) return;
-    final result =
-        await Process.run('flutter', ['format', ...modifiedFilePaths]);
+    final result = await Process.run('dart', ['format', ...modifiedFilePaths]);
     // ignore: avoid_print
     print(result.stdout);
     if (result.exitCode != 0) {
