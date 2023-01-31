@@ -66,7 +66,7 @@ class Utils {
   }
 
   /// Returns the list of modified file names
-  Future<List<String>> getModifiedFileNames({
+  static Future<List<String>> getModifiedFileNames({
     List<String> directories = const ['lib', 'test'],
   }) async {
     final result = await Process.run(
@@ -87,7 +87,7 @@ class Utils {
   }
 
   /// Check if the branch name is supported for the beginning of the name
-  void isBranchNameValid(
+  static void isBranchNameValid(
     String branchName, {
     // additional branch names that you want to support, optional
     List<String>? additionalBranchNames,
