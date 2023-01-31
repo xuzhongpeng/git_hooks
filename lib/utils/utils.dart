@@ -69,29 +69,44 @@ class Utils {
   static Future<List<String>> getModifiedFilePaths({
     List<String> directories = const ['lib', 'test'],
   }) async {
-    final result = await Process.run(
+    final unstaged = await Process.run(
       'git',
       ['diff', '--name-only'],
     );
 
-    final fileNames = (result.stdout as String)
+    final staged = await Process.run(
+      'git',
+      ['diff', '--name-only', '--staged'],
+    );
+
+    final untracked = await Process.run(
+      'git',
+      ['ls-files', '--others', '--exclude-standard'],
+    );
+
+    final combinedStdout =
+        '${unstaged.stdout}${staged.stdout}${untracked.stdout}';
+
+    final modifiedFilePaths = combinedStdout
         // split file names by line
         .split('\n')
         // consider only folders starting with `directories`
         .where(
           (fileName) => fileName.startsWith(RegExp(directories.join('|'))),
-        );
-    return fileNames.toList();
+        )
+        .toSet()
+        .toList();
+    return modifiedFilePaths;
   }
 
   /// Formats the flutter code
   static Future<void> formatFlutterCode() async {
     final modifiedFilePaths = await Utils.getModifiedFilePaths();
-    print("modifiedFilePaths: $modifiedFilePaths");
     // Do not format if there aren't modified files to format.
     if (modifiedFilePaths.isEmpty) return;
     final result =
         await Process.run('flutter', ['format', ...modifiedFilePaths]);
+    // ignore: avoid_print
     print(result.stdout);
     if (result.exitCode != 0) {
       throw Exception('flutter format exitCode: ${result.exitCode}');
