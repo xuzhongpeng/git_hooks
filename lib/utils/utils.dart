@@ -94,6 +94,8 @@ class Utils {
         .where(
           (fileName) => fileName.startsWith(RegExp(directories.join('|'))),
         )
+        // consider only Dart files
+        .where((fileName) => fileName.endsWith('.dart'))
         .toSet()
         .toList();
     return modifiedFilePaths;
