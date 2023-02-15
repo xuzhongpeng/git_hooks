@@ -5,7 +5,17 @@ import 'dart:io';
 String commonHook(String path) {
   var temp = '';
   if (Platform.isMacOS) {
-    temp += 'source ~/.bash_profile\n';
+    temp += '''
+if [ -f ~/.bash_profile ]
+then
+  source ~/.bash_profile
+fi
+
+if [ -f ~/.zsh_profile ]
+then
+  source ~/.zsh_profile
+fi
+''';
   }
   temp += '''
 hookName=`basename "\$0"`
