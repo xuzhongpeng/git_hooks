@@ -1,3 +1,6 @@
+## 1.0.1
+- Resolve #19:'.bash_profile: No such file or directory' in MacOS
+
 ## 1.0.0
 - support null safety
 ## 0.1.3-nullsafety.0
