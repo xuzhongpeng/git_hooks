@@ -1,7 +1,4 @@
-import 'dart:io';
 import 'package:git_hooks/runtime/git_hooks.dart';
-import 'package:git_hooks/utils/utils.dart';
-import 'package:yaml/yaml.dart';
 
 import 'package:git_hooks/install/create_hooks.dart';
 
@@ -24,12 +21,6 @@ void main(List<dynamic>? arguments) {
         }
       } else if (str == '-h' || str == '-help') {
         help();
-      } else if (str == '-v' || str == '--version') {
-        var f = File(Utils.uri((Utils.getOwnPath() ?? '') + '/pubspec.yaml'));
-        var text = f.readAsStringSync();
-        Map yaml = loadYaml(text);
-        String? version = yaml['version'];
-        print(version);
       } else if (str == 'uninstall') {
         GitHooks.unInstall();
       } else {

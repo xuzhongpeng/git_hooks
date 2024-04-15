@@ -12,28 +12,7 @@ class GitHooks {
   /// create files from dart codes.
   /// [targetPath] is the absolute path
   static void init({String? targetPath}) async {
-    try {
-      await Process.run('git_hooks', ['-v']);
-    } catch (error) {
-      var result = await Process.run('pub', [
-        'global',
-        'activate',
-        '--source',
-        'path',
-        Utils.getOwnPath() ?? '',
-      // ignore: body_might_complete_normally_catch_error
-      ]).catchError((onError) {
-        print(onError);
-      });
-      print(result.stdout);
-      if (result.stderr.length != 0) {
-        print(_ansi.error(result.stderr));
-        print(_ansi.subtle(
-            'You can check \'git_hooks\' in your pubspec.yaml,and use \'pub get\' or \'flutter pub get\' again'));
-        exit(1);
-      }
-      await CreateHooks.copyFile(targetPath: targetPath);
-    }
+    await CreateHooks.copyFile(targetPath: targetPath);
   }
 
   /// unInstall git_hooks
