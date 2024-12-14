@@ -19,11 +19,12 @@ class CreateHooks {
         exit(1);
       }
     }
-    var relativePath = '${_rootDir}/${targetPath}';
+    var relativePath = join(_rootDir, targetPath);
     var hookFile = File(Utils.uri(absolute(_rootDir, relativePath)));
     var logger = Logger.standard();
     try {
-      var commonStr = commonHook(Utils.uri(targetPath));
+      var commonStr =
+          commonHook(Utils.uri(targetPath).replaceAll('\\', '\\\\'));
       commonStr = createHeader() + commonStr;
       var progress = logger.progress('create files');
       await _hooksCommand((hookFile) async {

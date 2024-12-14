@@ -1,3 +1,5 @@
+## 1.0.2
+- fix: #25: Transform "\" into "\\" what path code into hookFiles(On Windows)
 ## 1.0.1
 - Resolve #19:'.bash_profile: No such file or directory' in MacOS
 

@@ -34,7 +34,7 @@ class GitHooks {
   /// GitHooks.call(arguments, params);
   /// ```
   /// [argument] is just passthrough from main methods. It may ['pre-commit','commit-msg'] from [hookList]
-  static void call(List<String> argument, Map<Git, UserBackFun> params) async {
+  static void call(List<dynamic> argument, Map<Git, UserBackFun> params) async {
     var type = argument[0];
     try {
       params.forEach((userType, function) async {
